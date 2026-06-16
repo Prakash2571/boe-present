@@ -8,12 +8,32 @@ import {
   GRAPH_DRAW_MS,
 } from "./presentationMotion";
 
-/* Customer journey: growth from 0 customers in 2023 to 120 in 2026 */
-const data = [
-  { year: "2023", customers: 0 },
-  { year: "2024", customers: 30 },
-  { year: "2025", customers: 70 },
-  { year: "2026", customers: 120 },
+/*
+ * Customer journey (time-accurate):
+ *  - Slow, near-flat growth from 2023 through early 2025
+ *  - Officially registered in May 2025
+ *  - Sharp take-off a few months later, reaching 120 aggregate clients at present
+ *  `t` is a decimal year (e.g. 2025.33 ≈ May 2025). `showValue` labels key points.
+ */
+const TIMELINE_START = 2023;
+const TIMELINE_END = 2026.45; // ≈ present (mid-2026)
+const REGISTERED_T = 2025.33; // May 2025
+
+const data: {
+  t: number;
+  customers: number;
+  showValue?: boolean;
+}[] = [
+  { t: 2023.0, customers: 1, showValue: true },
+  { t: 2023.5, customers: 2 },
+  { t: 2024.0, customers: 4 },
+  { t: 2024.5, customers: 6 },
+  { t: 2025.0, customers: 8 },
+  { t: REGISTERED_T, customers: 10, showValue: true }, // registered
+  { t: 2025.58, customers: 24 },
+  { t: 2025.83, customers: 52 },
+  { t: 2026.08, customers: 84 },
+  { t: TIMELINE_END, customers: 120, showValue: true },
 ];
 
 const chart = {
@@ -32,15 +52,32 @@ const chartHeight = chart.height - chart.paddingTop - chart.paddingBottom;
 const baselineY = chart.paddingTop + chartHeight;
 const yTicks = [0, 20, 40, 60, 80, 100, 120];
 
-const points = data.map((point, index) => {
-  const x =
-    chart.paddingLeft + (chartWidth * index) / Math.max(data.length - 1, 1);
-  const y =
-    chart.paddingTop +
-    ((chart.maxY - point.customers) / (chart.maxY - chart.minY)) * chartHeight;
+/* X position from a decimal year, mapped across the timeline */
+const xForYear = (t: number) =>
+  chart.paddingLeft +
+  (chartWidth * (t - TIMELINE_START)) / (TIMELINE_END - TIMELINE_START);
 
-  return { x, y, year: point.year, customers: point.customers };
-});
+const yForValue = (customers: number) =>
+  chart.paddingTop +
+  ((chart.maxY - customers) / (chart.maxY - chart.minY)) * chartHeight;
+
+/* Year gridline labels along the X-axis + the "Now" marker at the end */
+const xTicks = [
+  { t: 2023, label: "2023" },
+  { t: 2024, label: "2024" },
+  { t: 2025, label: "2025" },
+  { t: 2026, label: "2026" },
+  { t: TIMELINE_END, label: "Now" },
+];
+
+const registeredX = xForYear(REGISTERED_T);
+
+const points = data.map((point) => ({
+  x: xForYear(point.t),
+  y: yForValue(point.customers),
+  customers: point.customers,
+  showValue: point.showValue ?? false,
+}));
 
 const linePath = points
   .map((point, index) => {
@@ -231,11 +268,11 @@ export default function CustomerJourneyGraph() {
             transition={{ duration: 0.25 }}
           />
 
-          {/* X-axis year labels */}
-          {points.map((point, index) => (
+          {/* X-axis labels (years + "Now") */}
+          {xTicks.map((tick) => (
             <motion.text
-              key={point.year}
-              x={point.x}
+              key={tick.label}
+              x={xForYear(tick.t)}
               y={baselineY + 22}
               textAnchor="middle"
               className="fill-white/60"
@@ -244,12 +281,40 @@ export default function CustomerJourneyGraph() {
               animate={{ opacity: shouldAnimate ? 1 : 0 }}
               transition={{
                 duration: 0.3,
-                delay: prefersReducedMotion ? 0 : 0.18 + index * 0.05,
+                delay: prefersReducedMotion ? 0 : 0.18,
               }}
             >
-              {point.year}
+              {tick.label}
             </motion.text>
           ))}
+
+          {/* Registration marker — vertical dashed line at May 2025 */}
+          <motion.line
+            data-testid="registered-marker"
+            x1={registeredX}
+            y1={chart.paddingTop}
+            x2={registeredX}
+            y2={baselineY}
+            stroke="#f59e0b"
+            strokeWidth="1.5"
+            strokeDasharray="5 5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: shouldAnimate ? 0.7 : 0 }}
+            transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : 0.5 }}
+          />
+          <motion.text
+            x={registeredX - 8}
+            y={chart.paddingTop + 12}
+            textAnchor="end"
+            fill="#fbbf24"
+            fontSize="10"
+            fontWeight="600"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: shouldAnimate ? 1 : 0 }}
+            transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : 0.55 }}
+          >
+            Registered · May 2025
+          </motion.text>
 
           {/* Area fill */}
           <motion.path
@@ -283,13 +348,13 @@ export default function CustomerJourneyGraph() {
             }}
           />
 
-          {/* Data points + value labels */}
+          {/* Data points + value labels (key points only) */}
           {points.map((point, index) => (
-            <g key={`customer-${point.year}`}>
+            <g key={`customer-${index}`}>
               <motion.circle
                 cx={point.x}
                 cy={point.y}
-                r="4.5"
+                r={point.showValue ? 5 : 3.5}
                 fill="#10b981"
                 className="stroke-dark-graph"
                 strokeWidth="2"
@@ -301,25 +366,27 @@ export default function CustomerJourneyGraph() {
                 transition={{
                   duration: 0.24,
                   ease: [0.25, 0.1, 0.25, 1] as const,
-                  delay: prefersReducedMotion ? 0 : 0.34 + index * 0.08,
+                  delay: prefersReducedMotion ? 0 : 0.34 + index * 0.05,
                 }}
               />
-              <motion.text
-                x={point.x}
-                y={point.y - 12}
-                textAnchor="middle"
-                fill="#6ee7b7"
-                fontSize="11"
-                fontWeight="600"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: shouldAnimate ? 1 : 0 }}
-                transition={{
-                  duration: 0.3,
-                  delay: prefersReducedMotion ? 0 : 0.42 + index * 0.08,
-                }}
-              >
-                {point.customers}
-              </motion.text>
+              {point.showValue && (
+                <motion.text
+                  x={point.x}
+                  y={point.y - 12}
+                  textAnchor="middle"
+                  fill="#6ee7b7"
+                  fontSize="11"
+                  fontWeight="600"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: shouldAnimate ? 1 : 0 }}
+                  transition={{
+                    duration: 0.3,
+                    delay: prefersReducedMotion ? 0 : 0.42 + index * 0.05,
+                  }}
+                >
+                  {point.customers}
+                </motion.text>
+              )}
             </g>
           ))}
 
@@ -336,7 +403,7 @@ export default function CustomerJourneyGraph() {
             animate={{ opacity: shouldAnimate ? 1 : 0 }}
             transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : 0.6 }}
           >
-            0 clients · started in college
+            Started in college
           </motion.text>
           <motion.text
             data-testid="milestone-end"

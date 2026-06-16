@@ -21,9 +21,9 @@ export default function Slide9() {
   };
 
   const stats = [
-    { value: "0 → 120", label: "Aggregate clients onboarded", accent: "text-emerald-400" },
-    { value: "Dorm → Office", label: "From college to our own HQ", accent: "text-blue-400" },
-    { value: "2023 – Present", label: "Built in just a few years", accent: "text-indigo-400" },
+    { value: "0 → 120", label: "Aggregate clients", accent: "text-emerald-400" },
+    { value: "May 2025", label: "Officially registered", accent: "text-amber-400" },
+    { value: "Coming soon", label: "App, website & more", accent: "text-blue-400" },
   ];
 
   return (
@@ -70,10 +70,11 @@ export default function Slide9() {
       {/* Caption bar */}
       <ReactivePanel className="glass mt-[0.5vh] w-full p-[0.8vw]">
         <p className="text-sm text-neutral-300 text-center leading-relaxed">
-          What began in <span className="text-white font-medium">2023</span> as a student venture from a{" "}
-          <span className="text-white font-medium">college dorm room</span> has grown into a company with its
-          own <span className="text-blue-400 font-semibold">office today</span> — serving{" "}
-          <span className="text-emerald-400 font-semibold">120 customers</span> through consistent performance and transparency.
+          What began in <span className="text-white font-medium">2023</span> as a student venture grew slowly at first.
+          After being <span className="text-amber-400 font-semibold">officially registered in May 2025</span>, momentum
+          took off — reaching <span className="text-emerald-400 font-semibold">120 aggregate clients</span> today from our
+          own office. <span className="text-blue-400 font-medium">App &amp; website launching soon</span>, with much more
+          development on the way.
         </p>
       </ReactivePanel>
     </motion.div>
