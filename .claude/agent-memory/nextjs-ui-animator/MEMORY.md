@@ -1,0 +1,1 @@
+- [project_design_system.md](project_design_system.md) — Netflix-inspired dark design system for Beonedge presentation: card styles, colors, animation conventions, viewport-adaptive spacing rules

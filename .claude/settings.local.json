@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(npm install:*)",
+      "Read(//home/nethunter07/PROJECTS/**)",
+      "Bash(zip -r boe_presents_1.zip boe_presents_1 --exclude \"boe_presents_1/node_modules/*\" --exclude \"boe_presents_1/.next/*\" --exclude \"boe_presents_1/test-results/*\" --exclude \"boe_presents_1/.next_dev.log\")",
+      "Bash(cd:*)"
+    ]
+  }
+}

@@ -1,26 +1,353 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: #060d18;
+  --color-foreground: #f5f5f5;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: #060d18;
+  --foreground: #f5f5f5;
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.08);
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+  /* Fluid font — scales all rem-based text with viewport width.
+     12px at ≤1000 px wide → 18px at ≥1500 px wide. */
+  font-size: clamp(12px, 1.2vw, 18px);
 }
 
 body {
+  height: 100%;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(ellipse at 15% 5%, rgba(59, 130, 246, 0.08), transparent 50%),
+    radial-gradient(ellipse at 85% 90%, rgba(16, 185, 129, 0.05), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.04), transparent 60%),
+    linear-gradient(160deg, #040a14 0%, #060d18 50%, #0a1628 100%);
+  background-attachment: fixed;
+  font-family: var(--font-sans), "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent 40%);
+  pointer-events: none;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: auto 0 0;
+  height: 20vh;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.3));
+  pointer-events: none;
+}
+
+.presentation-shell {
+  isolation: isolate;
+}
+
+/* Glassmorphism card */
+.glass {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.03)
+  );
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  overflow: hidden;
+  @apply rounded-xl;
+}
+
+/* Elevated glassmorphism */
+.glass-elevated {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.04)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  overflow: hidden;
+  @apply rounded-xl;
+}
+
+/* Legacy compat */
+.glass-panel {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.03)
+  );
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  overflow: hidden;
+  @apply rounded-xl;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400;
+}
+
+a,
+button {
+  transition:
+    color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+/* ─── Light Mode Overhaul ─── */
+[data-theme="light"] {
+  --background: #f8fafc; /* Slate 50 */
+  --foreground: #0f172a; /* Slate 900 */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(15, 23, 42, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 1);
+}
+
+[data-theme="light"] body {
+  background:
+    radial-gradient(ellipse at 15% 5%, rgba(59, 130, 246, 0.08), transparent 50%),
+    radial-gradient(ellipse at 85% 90%, rgba(16, 185, 129, 0.05), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.04), transparent 60%),
+    linear-gradient(160deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+  color: #0f172a;
+}
+
+[data-theme="light"] .glass,
+[data-theme="light"] .glass-panel {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+[data-theme="light"] .glass-elevated {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.85));
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 16px 48px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* ── Base Text ── */
+[data-theme="light"] .text-white { color: #0f172a !important; }
+[data-theme="light"] .text-white\/5 { color: rgba(15, 23, 42, 0.05) !important; }
+[data-theme="light"] .text-white\/70,
+[data-theme="light"] .text-white\/80 { color: rgba(15, 23, 42, 0.75) !important; }
+[data-theme="light"] .text-gray-200, 
+[data-theme="light"] .text-neutral-200,
+[data-theme="light"] .text-gray-300, 
+[data-theme="light"] .text-neutral-300 { color: #334155 !important; }
+[data-theme="light"] .text-gray-400, 
+[data-theme="light"] .text-neutral-400,
+[data-theme="light"] .text-neutral-500 { color: #475569 !important; }
+
+/* ── Emeralds (Green) ── */
+[data-theme="light"] .text-emerald-300,
+[data-theme="light"] .text-emerald-400 { color: #059669 !important; }
+[data-theme="light"] .bg-emerald-400 { background-color: #059669 !important; }
+[data-theme="light"] .bg-emerald-500\/5 { background-color: rgba(5, 150, 105, 0.05) !important; }
+[data-theme="light"] .bg-emerald-500\/15 { background-color: rgba(5, 150, 105, 0.1) !important; }
+[data-theme="light"] .bg-emerald-900\/25 { background-color: rgba(5, 150, 105, 0.06) !important; }
+[data-theme="light"] .border-emerald-500\/20,
+[data-theme="light"] .border-emerald-500\/25 { border-color: rgba(5, 150, 105, 0.25) !important; }
+[data-theme="light"] .from-emerald-400, 
+[data-theme="light"] .from-emerald-500 { --tw-gradient-from: #059669 !important; }
+[data-theme="light"] .to-teal-400 { --tw-gradient-to: #0f766e !important; }
+[data-theme="light"] .border-l-emerald-500 { border-left-color: #059669 !important; }
+
+/* ── Blues ── */
+[data-theme="light"] .text-blue-300,
+[data-theme="light"] .text-blue-400 { color: #2563eb !important; }
+[data-theme="light"] .bg-blue-400,
+[data-theme="light"] .bg-blue-500 { background-color: #2563eb !important; }
+[data-theme="light"] .bg-blue-500\/5 { background-color: rgba(37, 99, 235, 0.05) !important; }
+[data-theme="light"] .bg-blue-500\/10,
+[data-theme="light"] .bg-blue-500\/15 { background-color: rgba(37, 99, 235, 0.08) !important; }
+[data-theme="light"] .border-blue-500\/25 { border-color: rgba(37, 99, 235, 0.2) !important; }
+[data-theme="light"] .border-l-blue-500 { border-left-color: #2563eb !important; }
+[data-theme="light"] .from-blue-400, 
+[data-theme="light"] .from-blue-500 { --tw-gradient-from: #2563eb !important; }
+[data-theme="light"] .to-blue-500 { --tw-gradient-to: #1d4ed8 !important; }
+
+/* ── Indigos / Purples ── */
+[data-theme="light"] .text-indigo-300,
+[data-theme="light"] .text-indigo-400 { color: #4f46e5 !important; }
+[data-theme="light"] .bg-indigo-500\/5 { background-color: rgba(79, 70, 229, 0.04) !important; }
+[data-theme="light"] .bg-indigo-500\/10,
+[data-theme="light"] .bg-indigo-500\/15 { background-color: rgba(79, 70, 229, 0.08) !important; }
+[data-theme="light"] .border-indigo-500\/25 { border-color: rgba(79, 70, 229, 0.2) !important; }
+[data-theme="light"] .border-l-indigo-500 { border-left-color: #4f46e5 !important; }
+[data-theme="light"] .from-indigo-400, 
+[data-theme="light"] .from-indigo-500 { --tw-gradient-from: #4f46e5 !important; }
+[data-theme="light"] .to-purple-400 { --tw-gradient-to: #7e22ce !important; }
+
+/* ── Cyans ── */
+[data-theme="light"] .text-cyan-100 { color: #0e7490 !important; }
+[data-theme="light"] .text-cyan-300, 
+[data-theme="light"] .text-cyan-400 { color: #0891b2 !important; }
+[data-theme="light"] .bg-cyan-500\/10 { background-color: rgba(8, 145, 178, 0.06) !important; }
+[data-theme="light"] .bg-cyan-500\/15 { background-color: rgba(8, 145, 178, 0.1) !important; }
+[data-theme="light"] .border-cyan-500\/20 { border-color: rgba(8, 145, 178, 0.2) !important; }
+[data-theme="light"] .to-cyan-400 { --tw-gradient-to: #0e7490 !important; }
+
+/* ── Ambers / Golds (Headlines & Accents) ── */
+[data-theme="light"] .text-amber-300,
+[data-theme="light"] .text-amber-400 { color: #b45309 !important; }
+[data-theme="light"] .from-amber-200 { --tw-gradient-from: #d97706 !important; }
+[data-theme="light"] .via-yellow-300 { --tw-gradient-via: #b45309 !important; }
+[data-theme="light"] .to-amber-400 { --tw-gradient-to: #92400e !important; }
+
+/* Direct background-image override for the heading gradient spans.
+   Tailwind v4 may inline gradient colors at compile time, making CSS variable
+   overrides ineffective — so we patch the background-image directly. */
+/* Heading gradient: from-amber-200 via-yellow-300 to-amber-400 (slides 1–8) */
+[data-theme="light"] .from-amber-200.via-yellow-300.to-amber-400 {
+  background-image: linear-gradient(to right, #d97706, #b45309, #92400e) !important;
+}
+
+/* Intro slide heading: from-blue-300 via-indigo-300 to-cyan-300 */
+[data-theme="light"] .from-blue-300.via-indigo-300.to-cyan-300 {
+  background-image: linear-gradient(to right, #1d4ed8, #4338ca, #0e7490) !important;
+}
+
+/* .text-gradient helper */
+[data-theme="light"] .text-gradient {
+  background-image: linear-gradient(to right, #d97706, #b45309, #92400e) !important;
+}
+
+/* ── Reds / Oranges ── */
+[data-theme="light"] .text-red-400,
+[data-theme="light"] .text-red-500 { color: #dc2626 !important; }
+[data-theme="light"] .bg-red-500\/5 { background-color: rgba(220, 38, 38, 0.05) !important; }
+[data-theme="light"] .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08) !important; }
+[data-theme="light"] .bg-red-500\/20 { background-color: rgba(220, 38, 38, 0.12) !important; }
+[data-theme="light"] .border-red-500\/10 { border-color: rgba(220, 38, 38, 0.15) !important; }
+[data-theme="light"] .from-red-400 { --tw-gradient-from: #dc2626 !important; }
+[data-theme="light"] .to-orange-500 { --tw-gradient-to: #c2410c !important; }
+
+/* ── Specific Overrides & Dividers ── */
+[data-theme="light"] .group:hover .group-hover\:text-blue-400\/15 { color: rgba(37, 99, 235, 0.15) !important; }
+[data-theme="light"] .bg-white\/20,
+[data-theme="light"] .bg-white\/25 { background-color: rgba(15, 23, 42, 0.1) !important; }
+[data-theme="light"] .border-white\/8,
+[data-theme="light"] .border-white\/10 { border-color: rgba(15, 23, 42, 0.08) !important; }
+[data-theme="light"] .border-white\/12,
+[data-theme="light"] .border-white\/15,
+[data-theme="light"] .border-white\/20,
+[data-theme="light"] .border-white\/35 { border-color: rgba(15, 23, 42, 0.12) !important; }
+[data-theme="light"] .bg-white\/3,
+[data-theme="light"] .bg-white\/4,
+[data-theme="light"] .bg-white\/5,
+[data-theme="light"] .bg-white\/10 { background-color: rgba(15, 23, 42, 0.03) !important; }
+[data-theme="light"] .hover\:bg-white\/10:hover { background-color: rgba(15, 23, 42, 0.06) !important; }
+
+/* ── Images & SVG Graphics ── */
+[data-theme="light"] img[alt*="logo"] {
+  filter: brightness(0) drop-shadow(0 0 4px rgba(37, 99, 235, 0.15)) !important;
+}
+
+/* Base class additions for Graph SVG compatibility */
+.fill-white\/55 { fill: rgba(255, 255, 255, 0.55); }
+.fill-white\/50 { fill: rgba(255, 255, 255, 0.5); }
+.fill-white\/60 { fill: rgba(255, 255, 255, 0.6); }
+.stroke-white\/10 { stroke: rgba(255, 255, 255, 0.1); }
+.stroke-white\/15 { stroke: rgba(255, 255, 255, 0.15); }
+.stroke-dark-graph { stroke: #141414; }
+
+[data-theme="light"] .fill-white\/55,
+[data-theme="light"] .fill-white\/50,
+[data-theme="light"] .fill-white\/60 { fill: rgba(15, 23, 42, 0.7) !important; }
+[data-theme="light"] .stroke-white\/10,
+[data-theme="light"] .stroke-white\/15 { stroke: rgba(15, 23, 42, 0.15) !important; }
+[data-theme="light"] .stroke-dark-graph { stroke: #f8fafc !important; }
+
+/* ── Robust Gradients (fixes text-transparent bug) ── */
+.text-gradient-gold,
+.text-gradient-emerald-gold {
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+}
+.text-gradient-gold {
+  background-image: linear-gradient(to right, #fde68a, #fcd34d, #fbbf24) !important;
+}
+[data-theme="light"] .text-gradient-gold {
+  background-image: linear-gradient(to right, #d97706, #b45309, #92400e) !important;
+}
+.text-gradient-emerald-gold {
+  background-image: linear-gradient(to right, #6ee7b7, #fef08a, #fcd34d) !important;
+}
+[data-theme="light"] .text-gradient-emerald-gold {
+  background-image: linear-gradient(to right, #059669, #d97706, #b45309) !important;
+}
+
+.text-gradient-blue-cyan {
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+  background-image: linear-gradient(to right, #93c5fd, #a5b4fc, #67e8f9) !important;
+}
+[data-theme="light"] .text-gradient-blue-cyan {
+  background-image: linear-gradient(to right, #1d4ed8, #4338ca, #0e7490) !important;
+}
+
+.text-gradient-indigo {
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+  background-image: linear-gradient(to right, #8b5cf6, #6366f1, #3b82f6) !important;
+}
+[data-theme="light"] .text-gradient-indigo {
+  background-image: linear-gradient(to right, #4338ca, #3730a3, #1e40af) !important;
+}
+
+/* ── Hero Logo (Slide 0) ── */
+.hero-logo-container {
+  /* Default dark mode gold glow */
+  filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(251,191,36,0.85)) drop-shadow(0 0 26px rgba(245,158,11,0.45));
+}
+[data-theme="light"] .hero-logo-container {
+  /* Dark navy-blue logo in light mode */
+  filter: brightness(0) invert(1) sepia(1) hue-rotate(200deg) saturate(5) brightness(0.25) drop-shadow(0 4px 6px rgba(15, 23, 42, 0.2)) !important;
+  opacity: 1 !important;
+}
+
+/* ── PDF Export Mode (fixes html2canvas hang) ── */
+.pdf-export-mode body {
+  background: var(--background) !important;
+}
+.pdf-export-mode .presentation-shell {
+  background: var(--background) !important;
+}
+.pdf-export-mode [style*="radial-gradient"],
+.pdf-export-mode [style*="filter: blur"] {
+  display: none !important; /* Hiding complex canvas-breaking blobs during export */
+}
+.pdf-export-mode .glass,
+.pdf-export-mode .glass-elevated,
+.pdf-export-mode .glass-panel {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
