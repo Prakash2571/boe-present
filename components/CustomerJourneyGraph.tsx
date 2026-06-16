@@ -24,15 +24,15 @@ const data: {
   customers: number;
   showValue?: boolean;
 }[] = [
-  { t: 2023.0, customers: 1, showValue: true },
-  { t: 2023.5, customers: 2 },
-  { t: 2024.0, customers: 4 },
-  { t: 2024.5, customers: 6 },
-  { t: 2025.0, customers: 8 },
-  { t: REGISTERED_T, customers: 10, showValue: true }, // registered
-  { t: 2025.58, customers: 24 },
-  { t: 2025.83, customers: 52 },
-  { t: 2026.08, customers: 84 },
+  { t: 2023.0, customers: 3, showValue: true },
+  { t: 2023.5, customers: 6 },
+  { t: 2024.0, customers: 11 },
+  { t: 2024.5, customers: 20 },
+  { t: 2025.0, customers: 32 },
+  { t: REGISTERED_T, customers: 45, showValue: true }, // registered
+  { t: 2025.58, customers: 68 },
+  { t: 2025.83, customers: 90 },
+  { t: 2026.08, customers: 108 },
   { t: TIMELINE_END, customers: 120, showValue: true },
 ];
 
