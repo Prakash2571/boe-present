@@ -10,11 +10,13 @@ import {
 import { AnimatePresence } from "framer-motion";
 import Slide from "./Slide";
 import { useTheme } from "@/context/ThemeContext";
-import { SLIDE_TRANSITION_MS } from "./presentationMotion";
 
 interface SlideContainerProps {
   children: ReactNode;
 }
+
+/** Path to the pre-rendered deck PDF served from /public. */
+const PRESENTATION_PDF_URL = "/beonedge-presentation.pdf";
 
 export default function SlideContainer({ children }: SlideContainerProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -50,49 +52,37 @@ export default function SlideContainer({ children }: SlideContainerProps) {
     return () => window.removeEventListener("keydown", handleKeyDown, true);
   }, []);
 
-  const exportToPDF = async () => {
+  /**
+   * Downloads the pre-rendered presentation PDF (served from /public).
+   * This gives an instant, reliable download of the full 10-slide deck
+   * without relying on slow, flaky in-browser html-to-image capture.
+   */
+  const downloadPDF = async () => {
     if (isExporting) return;
     setIsExporting(true);
 
-    const originalSlide = currentSlide;
-
     try {
-      document.body.classList.add("pdf-export-mode");
-      const { toJpeg } = await import("html-to-image");
-      const { jsPDF } = await import("jspdf");
-
-      const el = mainRef.current;
-      if (!el) return;
-
-      const W = el.offsetWidth;
-      const H = el.offsetHeight;
-
-      const pdf = new jsPDF({
-        orientation: "landscape",
-        unit: "px",
-        format: [W, H],
-      });
-
-      for (let i = 0; i < totalSlides; i++) {
-        setCurrentSlide(i);
-        // wait 5s for slide transition + all animations to complete
-        await new Promise((r) => setTimeout(r, 5000));
-
-        const dataUrl = await toJpeg(el, {
-          quality: 0.93,
-          width: W,
-          height: H,
-          pixelRatio: 1.5,
-        });
-
-        if (i > 0) pdf.addPage([W, H], "landscape");
-        pdf.addImage(dataUrl, "JPEG", 0, 0, W, H);
+      const response = await fetch(PRESENTATION_PDF_URL);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch PDF (${response.status})`);
       }
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
 
-      pdf.save(`beonedge-presentation.pdf`);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "beonedge-presentation.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Revoke on the next tick so the download has a chance to start.
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (error) {
+      console.error("PDF download failed:", error);
+      // Fallback: open the file directly so the user can still save it.
+      window.open(PRESENTATION_PDF_URL, "_blank");
     } finally {
-      document.body.classList.remove("pdf-export-mode");
-      setCurrentSlide(originalSlide);
       setIsExporting(false);
     }
   };
@@ -136,11 +126,11 @@ export default function SlideContainer({ children }: SlideContainerProps) {
 
       {/* Bottom-right controls: theme toggle + PDF export */}
       <div className="absolute bottom-[2vh] right-[2vw] z-50 flex items-center gap-2">
-        {/* PDF Export button */}
+        {/* PDF Download button */}
         <button
-          onClick={exportToPDF}
+          onClick={downloadPDF}
           disabled={isExporting}
-          title="Export to PDF"
+          title="Download presentation PDF"
           className="glass flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-white/70 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isExporting ? (
@@ -149,14 +139,14 @@ export default function SlideContainer({ children }: SlideContainerProps) {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
               </svg>
-              <span>Exporting…</span>
+              <span>Downloading…</span>
             </>
           ) : (
             <>
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
               </svg>
-              <span>PDF</span>
+              <span>Download PDF</span>
             </>
           )}
         </button>
