@@ -450,12 +450,14 @@ def slide_why(p):
     # chart
     beon = [(i/5, v) for i,v in enumerate([100,116,134.56,156.09,181.06,210])]
     nifty= [(i/5, v) for i,v in enumerate([100,111.6,124.54,139.0,155.12,176])]
+    bank = [(i/5, v) for i,v in enumerate([100,108,116.64,125.97,136.05,146.93])]
     draw_chart(p, 90, 214, PAGE_W-180, 250,
-               series=[(nifty, PURPLE, 2.2),(beon, EMERALD, 2.8)],
+               series=[(bank, AMBER, 2.0),(nifty, PURPLE, 2.2),(beon, EMERALD, 2.8)],
                yticks=[80,100,120,140,160,180,200,220], ymin=80, ymax=220,
                xlabels=[(i/5, y) for i,y in enumerate(["2021","2022","2023","2024","2025","2026"])],
-               title_txt="BeOnEdge vs Nifty 50 Performance Comparison (5 Years)",
-               legend=[("BeOnEdge (16% CAGR)",EMERALD),("Nifty 50 (~11.6% CAGR)",PURPLE)])
+               title_txt="BeOnEdge vs Nifty 50 vs Bank FD Performance Comparison (5 Years)",
+               legend=[("BeOnEdge (16% CAGR)",EMERALD),("Nifty 50 (~11.6% CAGR)",PURPLE),
+                       ("Bank FD (8% CAGR)",AMBER)])
     footer(p, 6)
 
 

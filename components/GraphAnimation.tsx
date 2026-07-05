@@ -5,12 +5,12 @@ import { motion, useReducedMotion } from "framer-motion";
 import { CONTENT_TRANSITION, CONTENT_TRANSITION_MS, GRAPH_DRAW_MS } from "./presentationMotion";
 
 const data = [
-  { year: "2021", "Beonedge (16% CAGR)": 100, "Nifty 50 (~11.6% CAGR)": 100 },
-  { year: "2022", "Beonedge (16% CAGR)": 116, "Nifty 50 (~11.6% CAGR)": 111.6 },
-  { year: "2023", "Beonedge (16% CAGR)": 134.56, "Nifty 50 (~11.6% CAGR)": 124.54 },
-  { year: "2024", "Beonedge (16% CAGR)": 156.09, "Nifty 50 (~11.6% CAGR)": 139.0 },
-  { year: "2025", "Beonedge (16% CAGR)": 181.06, "Nifty 50 (~11.6% CAGR)": 155.12 },
-  { year: "2026", "Beonedge (16% CAGR)": 210, "Nifty 50 (~11.6% CAGR)": 176 },
+  { year: "2021", "Beonedge (16% CAGR)": 100, "Nifty 50 (~11.6% CAGR)": 100, "Bank FD (8% CAGR)": 100 },
+  { year: "2022", "Beonedge (16% CAGR)": 116, "Nifty 50 (~11.6% CAGR)": 111.6, "Bank FD (8% CAGR)": 108 },
+  { year: "2023", "Beonedge (16% CAGR)": 134.56, "Nifty 50 (~11.6% CAGR)": 124.54, "Bank FD (8% CAGR)": 116.64 },
+  { year: "2024", "Beonedge (16% CAGR)": 156.09, "Nifty 50 (~11.6% CAGR)": 139.0, "Bank FD (8% CAGR)": 125.97 },
+  { year: "2025", "Beonedge (16% CAGR)": 181.06, "Nifty 50 (~11.6% CAGR)": 155.12, "Bank FD (8% CAGR)": 136.05 },
+  { year: "2026", "Beonedge (16% CAGR)": 210, "Nifty 50 (~11.6% CAGR)": 176, "Bank FD (8% CAGR)": 146.93 },
 ];
 
 const chart = {
@@ -41,11 +41,16 @@ const beonedgePoints = data.map((point, index) => {
     ((chart.maxY - point["Nifty 50 (~11.6% CAGR)"]) /
       (chart.maxY - chart.minY)) *
       chartHeight;
+  const bankY =
+    chart.paddingTop +
+    ((chart.maxY - point["Bank FD (8% CAGR)"]) /
+      (chart.maxY - chart.minY)) *
+      chartHeight;
 
-  return { x, beonedgeY, niftyY, year: point.year };
+  return { x, beonedgeY, niftyY, bankY, year: point.year };
 });
 
-const buildLinePath = (valueKey: "beonedgeY" | "niftyY") =>
+const buildLinePath = (valueKey: "beonedgeY" | "niftyY" | "bankY") =>
   beonedgePoints
     .map((point, index) => {
       const prefix = index === 0 ? "M" : "L";
@@ -53,7 +58,7 @@ const buildLinePath = (valueKey: "beonedgeY" | "niftyY") =>
     })
     .join(" ");
 
-const buildAreaPath = (valueKey: "beonedgeY" | "niftyY") => {
+const buildAreaPath = (valueKey: "beonedgeY" | "niftyY" | "bankY") => {
   const line = buildLinePath(valueKey);
   const last = beonedgePoints[beonedgePoints.length - 1];
   const first = beonedgePoints[0];
@@ -63,8 +68,10 @@ const buildAreaPath = (valueKey: "beonedgeY" | "niftyY") => {
 
 const beonedgeLinePath = buildLinePath("beonedgeY");
 const niftyLinePath = buildLinePath("niftyY");
+const bankLinePath = buildLinePath("bankY");
 const beonedgeAreaPath = buildAreaPath("beonedgeY");
 const niftyAreaPath = buildAreaPath("niftyY");
+const bankAreaPath = buildAreaPath("bankY");
 
 /* Y-axis label center position */
 const yLabelX = 18;
@@ -130,6 +137,10 @@ export default function GraphAnimation() {
             <span className="h-2 w-2 rounded-full bg-[#c084fc]" />
             <span>Nifty 50 (~11.6% CAGR)</span>
           </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-[#f59e0b]" />
+            <span>Bank FD (8% CAGR)</span>
+          </div>
         </motion.div>
       </motion.div>
 
@@ -159,6 +170,10 @@ export default function GraphAnimation() {
             <linearGradient id="niftyAreaGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#c084fc" stopOpacity="0.2" />
               <stop offset="100%" stopColor="#c084fc" stopOpacity="0.01" />
+            </linearGradient>
+            <linearGradient id="bankAreaGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.16" />
+              <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.01" />
             </linearGradient>
           </defs>
 
@@ -262,6 +277,13 @@ export default function GraphAnimation() {
 
           {/* Area fills */}
           <motion.path
+            d={bankAreaPath}
+            fill="url(#bankAreaGradient)"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: shouldAnimate ? 1 : 0 }}
+            transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : 0.3 }}
+          />
+          <motion.path
             d={niftyAreaPath}
             fill="url(#niftyAreaGradient)"
             initial={{ opacity: 0 }}
@@ -277,6 +299,21 @@ export default function GraphAnimation() {
           />
 
           {/* Line paths */}
+          <motion.path
+            d={bankLinePath}
+            fill="none"
+            stroke="#f59e0b"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            initial={{ pathLength: prefersReducedMotion ? 1 : 0, opacity: 0.5 }}
+            animate={{ pathLength: shouldAnimate ? 1 : 0, opacity: shouldAnimate ? 1 : 0.5 }}
+            transition={{
+              duration: prefersReducedMotion ? 0 : GRAPH_DRAW_MS / 1000,
+              ease: [0.25, 0.1, 0.25, 1] as const,
+              delay: prefersReducedMotion ? 0 : 0.2,
+            }}
+          />
           <motion.path
             d={niftyLinePath}
             fill="none"
@@ -349,6 +386,28 @@ export default function GraphAnimation() {
                 duration: 0.24,
                 ease: [0.25, 0.1, 0.25, 1] as const,
                 delay: prefersReducedMotion ? 0 : 0.42 + index * 0.08,
+              }}
+            />
+          ))}
+
+          {beonedgePoints.map((point, index) => (
+            <motion.circle
+              key={`bank-${point.year}`}
+              cx={point.x}
+              cy={point.bankY}
+              r="3.5"
+              fill="#f59e0b"
+              className="stroke-dark-graph"
+              strokeWidth="2"
+              initial={{ opacity: 0, scale: 0.2 }}
+              animate={{
+                opacity: shouldAnimate ? 1 : 0,
+                scale: shouldAnimate ? 1 : 0.2,
+              }}
+              transition={{
+                duration: 0.24,
+                ease: [0.25, 0.1, 0.25, 1] as const,
+                delay: prefersReducedMotion ? 0 : 0.5 + index * 0.08,
               }}
             />
           ))}
