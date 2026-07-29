@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { CONTENT_TRANSITION, CONTENT_TRANSITION_MS, GRAPH_DRAW_MS } from "./presentationMotion";
 
@@ -81,6 +81,20 @@ const yLabelY = chart.paddingTop + chartHeight / 2;
 export default function GraphAnimation6Year() {
   const prefersReducedMotion = useReducedMotion();
   const [animationState, setAnimationState] = useState<"idle" | "running" | "complete">("idle");
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const plotRef = useRef<HTMLDivElement>(null);
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const container = plotRef.current;
+    if (!container) return;
+    const rect = container.getBoundingClientRect();
+    const relX = ((event.clientX - rect.left) / rect.width) * chart.width;
+    const t = (relX - chart.paddingLeft) / chartWidth;
+    const idx = Math.round(t * (data.length - 1));
+    setHoverIndex(Math.max(0, Math.min(data.length - 1, idx)));
+  };
+
+  const handlePointerLeave = () => setHoverIndex(null);
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -152,6 +166,9 @@ export default function GraphAnimation6Year() {
           ...CONTENT_TRANSITION,
           delay: CONTENT_TRANSITION_MS / 1000 / 2,
         }}
+        ref={plotRef}
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
         className="relative w-full px-[0.5vw] pb-[0.5vh]"
         style={{ aspectRatio: `${chart.width} / ${chart.height}` }}
       >
@@ -412,7 +429,69 @@ export default function GraphAnimation6Year() {
               }}
             />
           ))}
+
+          {/* Hover guide line + highlighted markers */}
+          {hoverIndex !== null && (() => {
+            const hp = computedPoints[hoverIndex];
+            return (
+              <g pointerEvents="none">
+                <line
+                  x1={hp.x}
+                  y1={chart.paddingTop}
+                  x2={hp.x}
+                  y2={baselineY}
+                  className="stroke-white/30"
+                  strokeWidth="1"
+                  strokeDasharray="3 4"
+                />
+                <circle cx={hp.x} cy={hp.bankY} r="5.5" fill="#f59e0b" stroke="#fff" strokeWidth="1.5" />
+                <circle cx={hp.x} cy={hp.niftyY} r="5.5" fill="#c084fc" stroke="#fff" strokeWidth="1.5" />
+                <circle cx={hp.x} cy={hp.beonedgeY} r="6" fill="#10b981" stroke="#fff" strokeWidth="1.5" />
+              </g>
+            );
+          })()}
         </svg>
+
+        {/* HTML tooltip */}
+        {hoverIndex !== null && (() => {
+          const hp = computedPoints[hoverIndex];
+          const row = data[hoverIndex];
+          const leftPct = (hp.x / chart.width) * 100;
+          const flip = hoverIndex >= data.length - 2;
+          return (
+            <div
+              className="pointer-events-none absolute z-10 top-[8%]"
+              style={{
+                left: `${leftPct}%`,
+                transform: flip ? "translateX(-108%)" : "translateX(8%)",
+              }}
+            >
+              <div className="glass-elevated rounded-lg border border-white/10 px-3 py-2 shadow-xl min-w-[9rem]">
+                <div className="text-xs font-bold text-white mb-1.5">{row.year}</div>
+                <div className="flex flex-col gap-1 text-[0.7rem]">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="flex items-center gap-1.5 text-neutral-300">
+                      <span className="h-2 w-2 rounded-full bg-emerald-500" />BeOnEdge
+                    </span>
+                    <span className="font-semibold text-emerald-400">₹{row["Beonedge (16% CAGR)"].toFixed(0)}</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="flex items-center gap-1.5 text-neutral-300">
+                      <span className="h-2 w-2 rounded-full bg-[#c084fc]" />Nifty 50
+                    </span>
+                    <span className="font-semibold text-[#c084fc]">₹{row["Nifty 50 (~11.6% CAGR)"].toFixed(0)}</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="flex items-center gap-1.5 text-neutral-300">
+                      <span className="h-2 w-2 rounded-full bg-[#f59e0b]" />Bank FD
+                    </span>
+                    <span className="font-semibold text-[#f59e0b]">₹{row["Bank FD (7% CAGR)"].toFixed(0)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
       </motion.div>
     </div>
   );
