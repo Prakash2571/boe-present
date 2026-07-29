@@ -12,11 +12,20 @@ const popupVars = {
   },
 };
 
+const rowVars = {
+  hidden: { opacity: 0, y: 12 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] as const },
+  },
+};
+
 const containerVars = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.06 },
+    transition: { staggerChildren: 0.06, delayChildren: 0.06 },
   },
 };
 
@@ -101,17 +110,27 @@ export default function Slide12() {
       animate="show"
       className="w-full max-w-6xl mx-auto flex flex-col items-center justify-center h-full"
     >
+      {/* Eyebrow */}
+      <motion.p
+        variants={popupVars}
+        className="text-emerald-400 font-medium tracking-widest uppercase text-xs"
+      >
+        The BeOnEdge Advantage
+      </motion.p>
+
       {/* Title */}
       <motion.h1
         variants={popupVars}
-        className="text-2xl md:text-3xl font-bold text-white tracking-tight text-center"
+        className="text-3xl md:text-4xl font-bold text-white tracking-tight text-center mt-[0.5vh]"
       >
         Why{" "}
         <span className="text-gradient-gold">BeOnEdge</span>
       </motion.h1>
+      <div className="h-[2px] w-16 bg-gradient-to-r from-emerald-500 to-blue-500 mt-2 mb-[1.2vh] mx-auto" />
+
       <motion.p
         variants={popupVars}
-        className="text-xs md:text-sm text-neutral-300 text-center max-w-3xl mt-2 mb-[1.5vh] leading-relaxed"
+        className="text-xs md:text-sm text-neutral-300 text-center max-w-3xl mb-[1.5vh] leading-relaxed"
       >
         We combine the research discipline of institutional investing with the
         personalized service of a boutique wealth management firm—helping clients
@@ -119,52 +138,65 @@ export default function Slide12() {
       </motion.p>
 
       {/* Comparison Table */}
-      <motion.div variants={popupVars} className="w-full flex-1 min-h-0">
-        <ReactivePanel className="glass rounded-2xl p-[1vw] w-full h-full overflow-auto">
-          <table className="w-full text-left border-collapse">
+      <motion.div variants={popupVars} className="w-full">
+        <ReactivePanel className="glass-elevated rounded-2xl p-[0.9vw] w-full">
+          <table className="w-full text-left border-collapse table-fixed">
+            <colgroup>
+              <col className="w-[19%]" />
+              <col className="w-[22%]" />
+              <col className="w-[20%]" />
+              <col className="w-[22%]" />
+              <col className="w-[17%]" />
+            </colgroup>
             <thead>
-              <tr className="border-b border-white/10">
-                <th className="py-[0.8vh] px-[0.6vw] text-xs md:text-sm font-semibold text-neutral-400">
+              <tr className="bg-white/[0.05] border-b border-white/15">
+                <th className="py-[0.9vh] px-[0.7vw] text-[0.7rem] font-semibold uppercase tracking-wider text-neutral-400 rounded-l-lg">
                   Parameter
                 </th>
-                <th className="py-[0.8vh] px-[0.6vw] text-xs md:text-sm font-bold text-emerald-400">
-                  BeOnEdge
+                <th className="py-[0.9vh] px-[0.7vw] text-[0.72rem] md:text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/[0.1]">
+                  <span className="inline-flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    BeOnEdge
+                  </span>
                 </th>
-                <th className="py-[0.8vh] px-[0.6vw] text-xs md:text-sm font-semibold text-neutral-400">
+                <th className="py-[0.9vh] px-[0.7vw] text-[0.7rem] font-semibold uppercase tracking-wider text-neutral-400">
                   Mutual Funds
                 </th>
-                <th className="py-[0.8vh] px-[0.6vw] text-xs md:text-sm font-semibold text-neutral-400">
+                <th className="py-[0.9vh] px-[0.7vw] text-[0.7rem] font-semibold uppercase tracking-wider text-neutral-400">
                   Traditional Wealth Managers
                 </th>
-                <th className="py-[0.8vh] px-[0.6vw] text-xs md:text-sm font-semibold text-neutral-400">
+                <th className="py-[0.9vh] px-[0.7vw] text-[0.7rem] font-semibold uppercase tracking-wider text-neutral-400 rounded-r-lg">
                   Bank FD
                 </th>
               </tr>
             </thead>
             <tbody>
               {tableData.map((row, idx) => (
-                <tr
+                <motion.tr
                   key={row.parameter}
-                  className={`border-b border-white/5 ${
+                  variants={rowVars}
+                  className={`border-b border-white/5 transition-colors hover:bg-white/[0.04] ${
                     idx % 2 === 0 ? "bg-white/[0.02]" : ""
                   }`}
                 >
-                  <td className="py-[0.6vh] px-[0.6vw] text-xs md:text-sm font-medium text-neutral-300">
+                  <td className="py-[0.62vh] px-[0.7vw] text-xs md:text-sm font-semibold text-white leading-snug">
                     {row.parameter}
                   </td>
-                  <td className="py-[0.6vh] px-[0.6vw] text-xs md:text-sm font-semibold text-emerald-400">
+                  <td className="py-[0.62vh] px-[0.7vw] text-xs md:text-sm font-semibold text-emerald-400 bg-emerald-500/[0.06] leading-snug">
                     {row.boe}
                   </td>
-                  <td className="py-[0.6vh] px-[0.6vw] text-xs md:text-sm text-neutral-400">
+                  <td className="py-[0.62vh] px-[0.7vw] text-xs md:text-sm text-neutral-400 leading-snug">
                     {row.mutual}
                   </td>
-                  <td className="py-[0.6vh] px-[0.6vw] text-xs md:text-sm text-neutral-400">
+                  <td className="py-[0.62vh] px-[0.7vw] text-xs md:text-sm text-neutral-400 leading-snug">
                     {row.traditional}
                   </td>
-                  <td className="py-[0.6vh] px-[0.6vw] text-xs md:text-sm text-neutral-400">
+                  <td className="py-[0.62vh] px-[0.7vw] text-xs md:text-sm text-neutral-400 leading-snug">
                     {row.fd}
                   </td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>
