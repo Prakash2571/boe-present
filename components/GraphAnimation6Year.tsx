@@ -5,13 +5,13 @@ import { motion, useReducedMotion } from "framer-motion";
 import { CONTENT_TRANSITION, CONTENT_TRANSITION_MS, GRAPH_DRAW_MS } from "./presentationMotion";
 
 const data = [
-  { year: "2020", "Beonedge (16% CAGR)": 100, "Nifty 50 (~11.6% CAGR)": 100, "Bank FD (8% CAGR)": 100 },
-  { year: "2021", "Beonedge (16% CAGR)": 116, "Nifty 50 (~11.6% CAGR)": 111.6, "Bank FD (8% CAGR)": 108 },
-  { year: "2022", "Beonedge (16% CAGR)": 134.56, "Nifty 50 (~11.6% CAGR)": 124.54, "Bank FD (8% CAGR)": 116.64 },
-  { year: "2023", "Beonedge (16% CAGR)": 156.09, "Nifty 50 (~11.6% CAGR)": 139.0, "Bank FD (8% CAGR)": 125.97 },
-  { year: "2024", "Beonedge (16% CAGR)": 181.06, "Nifty 50 (~11.6% CAGR)": 155.12, "Bank FD (8% CAGR)": 136.05 },
-  { year: "2025", "Beonedge (16% CAGR)": 210.03, "Nifty 50 (~11.6% CAGR)": 173.11, "Bank FD (8% CAGR)": 146.93 },
-  { year: "2026", "Beonedge (16% CAGR)": 243.64, "Nifty 50 (~11.6% CAGR)": 193.19, "Bank FD (8% CAGR)": 158.69 },
+  { year: "2020", "Beonedge (16% CAGR)": 100, "Nifty 50 (~11.6% CAGR)": 100, "Bank FD (7% CAGR)": 100 },
+  { year: "2021", "Beonedge (16% CAGR)": 116, "Nifty 50 (~11.6% CAGR)": 111.6, "Bank FD (7% CAGR)": 107 },
+  { year: "2022", "Beonedge (16% CAGR)": 134.56, "Nifty 50 (~11.6% CAGR)": 124.54, "Bank FD (7% CAGR)": 114.49 },
+  { year: "2023", "Beonedge (16% CAGR)": 156.09, "Nifty 50 (~11.6% CAGR)": 139.0, "Bank FD (7% CAGR)": 122.5 },
+  { year: "2024", "Beonedge (16% CAGR)": 181.06, "Nifty 50 (~11.6% CAGR)": 155.12, "Bank FD (7% CAGR)": 131.08 },
+  { year: "2025", "Beonedge (16% CAGR)": 210.03, "Nifty 50 (~11.6% CAGR)": 173.11, "Bank FD (7% CAGR)": 140.26 },
+  { year: "2026", "Beonedge (16% CAGR)": 243.64, "Nifty 50 (~11.6% CAGR)": 193.19, "Bank FD (7% CAGR)": 150.07 },
 ];
 
 const chart = {
@@ -44,7 +44,7 @@ const computedPoints = data.map((point, index) => {
       chartHeight;
   const bankY =
     chart.paddingTop +
-    ((chart.maxY - point["Bank FD (8% CAGR)"]) /
+    ((chart.maxY - point["Bank FD (7% CAGR)"]) /
       (chart.maxY - chart.minY)) *
       chartHeight;
 
@@ -140,7 +140,7 @@ export default function GraphAnimation6Year() {
           </div>
           <div className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-[#f59e0b]" />
-            <span>Bank FD (8% CAGR)</span>
+            <span>Bank FD (7% CAGR)</span>
           </div>
         </motion.div>
       </motion.div>
