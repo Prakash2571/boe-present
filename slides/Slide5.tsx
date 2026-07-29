@@ -1,6 +1,5 @@
 "use client";
 import { motion } from "framer-motion";
-import GraphAnimation from "@/components/GraphAnimation";
 import ReactivePanel from "@/components/ReactivePanel";
 
 const popupVars = {
@@ -32,15 +31,26 @@ export default function Slide5() {
         variants={popupVars}
         className="text-3xl md:text-4xl font-bold text-white tracking-tight text-center"
       >
-        Why Choose{" "}
+        Our{" "}
         <span className="text-gradient-gold">
-          BeOnEdge?
+          Performance History
         </span>
       </motion.h1>
       <div className="h-[2px] w-16 bg-gradient-to-r from-emerald-500 to-blue-500 mt-2 mb-[1.5vh] mx-auto" />
 
-      {/* Two info cards — compact row */}
-      <div className="w-full grid grid-cols-2 gap-[1vw] mb-[1vh]">
+      {/* Subheading */}
+      <motion.p
+        variants={popupVars}
+        className="text-sm md:text-base text-neutral-300 leading-relaxed text-center max-w-4xl mb-[2vh]"
+      >
+        Over the past six years, our research-driven investment process has
+        consistently delivered superior risk-adjusted returns across multiple
+        market environments through disciplined asset allocation, fundamental
+        research, and proactive risk management.
+      </motion.p>
+
+      {/* Two info cards — stacked vertically */}
+      <div className="w-full flex flex-col gap-[1.5vh]">
         <ReactivePanel className="glass flex flex-col p-[1.2vw]">
           <h2 className="text-base md:text-lg font-bold text-white mb-[0.5vh]">
             Experienced Market Participation
@@ -79,28 +89,6 @@ export default function Slide5() {
           </p>
         </ReactivePanel>
       </div>
-
-      {/* Chart — dominant element */}
-      <ReactivePanel className="w-full">
-        <GraphAnimation />
-      </ReactivePanel>
-
-      {/* Research bar — tight under chart */}
-      <ReactivePanel className="glass mt-[0.5vh] w-full p-[0.8vw]">
-        <div className="flex items-center gap-[2vw] w-full">
-          <h2 className="text-base md:text-lg font-bold text-white whitespace-nowrap">
-            Research-Driven Approach
-          </h2>
-          <ul className="flex flex-1 justify-around items-center text-sm text-neutral-400">
-            {["Deep fundamental research", "Market data analysis", "Statistical models", "Continuous monitoring"].map((label) => (
-              <li key={label} className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full flex-shrink-0" />
-                {label}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </ReactivePanel>
     </motion.div>
   );
 }
