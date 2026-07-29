@@ -20,13 +20,6 @@ export default function Slide11() {
     },
   };
 
-  const researchItems = [
-    { text: "Deep fundamental research", color: "text-emerald-400" },
-    { text: "Market data analysis", color: "text-blue-400" },
-    { text: "Statistical models", color: "text-amber-400" },
-    { text: "Continuous monitoring", color: "text-purple-400" },
-  ];
-
   return (
     <motion.div
       variants={containerVars}
@@ -50,20 +43,6 @@ export default function Slide11() {
       {/* Graph — dominant full-width element */}
       <ReactivePanel className="w-full flex-1 min-h-0">
         <GraphAnimation6Year />
-      </ReactivePanel>
-
-      {/* Research-Driven Approach bottom bar */}
-      <ReactivePanel className="glass mt-[1vh] w-full p-[0.8vw]">
-        <div className="flex items-center justify-center gap-[1.5vw]">
-          <span className="text-sm font-semibold text-white">Research-Driven Approach</span>
-          <span className="text-white/20">|</span>
-          {researchItems.map((item) => (
-            <div key={item.text} className="flex items-center gap-1.5">
-              <span className={`w-1.5 h-1.5 rounded-full ${item.color.replace("text-", "bg-")}`} />
-              <span className={`text-xs ${item.color}`}>{item.text}</span>
-            </div>
-          ))}
-        </div>
       </ReactivePanel>
     </motion.div>
   );
