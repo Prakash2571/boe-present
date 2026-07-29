@@ -106,10 +106,17 @@ export default function Slide12() {
         variants={popupVars}
         className="text-2xl md:text-3xl font-bold text-white tracking-tight text-center"
       >
-        How We{" "}
-        <span className="text-gradient-gold">Compare</span>
+        Why{" "}
+        <span className="text-gradient-gold">BeOnEdge</span>
       </motion.h1>
-      <div className="h-[2px] w-16 bg-gradient-to-r from-emerald-500 to-blue-500 mt-2 mb-[1.5vh] mx-auto" />
+      <motion.p
+        variants={popupVars}
+        className="text-xs md:text-sm text-neutral-300 text-center max-w-3xl mt-2 mb-[1.5vh] leading-relaxed"
+      >
+        We combine the research discipline of institutional investing with the
+        personalized service of a boutique wealth management firm—helping clients
+        pursue sustainable, risk-conscious long-term wealth creation.
+      </motion.p>
 
       {/* Comparison Table */}
       <motion.div variants={popupVars} className="w-full flex-1 min-h-0">
@@ -163,15 +170,6 @@ export default function Slide12() {
           </table>
         </ReactivePanel>
       </motion.div>
-
-      {/* Bottom heading */}
-      <motion.h2
-        variants={popupVars}
-        className="text-lg md:text-xl font-bold text-white mt-[1.5vh] text-center"
-      >
-        Why Investors Choose{" "}
-        <span className="text-gradient-gold">BeOnEdge</span>
-      </motion.h2>
     </motion.div>
   );
 }
