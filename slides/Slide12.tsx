@@ -138,9 +138,9 @@ export default function Slide12() {
       </motion.p>
 
       {/* Comparison Table */}
-      <motion.div variants={popupVars} className="w-full">
-        <ReactivePanel className="glass-elevated rounded-2xl p-[0.9vw] w-full">
-          <table className="w-full text-left border-collapse table-fixed">
+      <motion.div variants={popupVars} className="w-full flex-1 min-h-0 flex">
+        <ReactivePanel className="glass-elevated rounded-2xl p-[1.2vw] w-full flex flex-col">
+          <table className="w-full h-full text-left border-collapse table-fixed">
             <colgroup>
               <col className="w-[19%]" />
               <col className="w-[22%]" />
@@ -150,24 +150,24 @@ export default function Slide12() {
             </colgroup>
             <thead>
               <tr className="bg-white/[0.05] border-b border-white/15">
-                <th className="py-[0.9vh] px-[0.7vw] text-[0.7rem] font-semibold uppercase tracking-wider text-neutral-400 rounded-l-lg">
+                <th className="py-[1.3vh] px-[0.9vw] text-xs md:text-sm font-semibold uppercase tracking-wider text-neutral-400 rounded-l-lg">
                   Parameter
                 </th>
-                <th className="py-[0.9vh] px-[0.7vw] text-[0.72rem] md:text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/[0.1]">
+                <th className="py-[1.3vh] px-[0.9vw] text-sm md:text-base font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/[0.1]">
                   <span className="inline-flex items-center gap-1.5">
-                    <svg className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                     </svg>
                     BeOnEdge
                   </span>
                 </th>
-                <th className="py-[0.9vh] px-[0.7vw] text-[0.7rem] font-semibold uppercase tracking-wider text-neutral-400">
+                <th className="py-[1.3vh] px-[0.9vw] text-xs md:text-sm font-semibold uppercase tracking-wider text-neutral-400">
                   Mutual Funds
                 </th>
-                <th className="py-[0.9vh] px-[0.7vw] text-[0.7rem] font-semibold uppercase tracking-wider text-neutral-400">
+                <th className="py-[1.3vh] px-[0.9vw] text-xs md:text-sm font-semibold uppercase tracking-wider text-neutral-400">
                   Traditional Wealth Managers
                 </th>
-                <th className="py-[0.9vh] px-[0.7vw] text-[0.7rem] font-semibold uppercase tracking-wider text-neutral-400 rounded-r-lg">
+                <th className="py-[1.3vh] px-[0.9vw] text-xs md:text-sm font-semibold uppercase tracking-wider text-neutral-400 rounded-r-lg">
                   Bank FD
                 </th>
               </tr>
@@ -181,19 +181,19 @@ export default function Slide12() {
                     idx % 2 === 0 ? "bg-white/[0.02]" : ""
                   }`}
                 >
-                  <td className="py-[0.62vh] px-[0.7vw] text-xs md:text-sm font-semibold text-white leading-snug">
+                  <td className="py-[1.15vh] px-[0.9vw] text-sm md:text-base font-semibold text-white leading-snug">
                     {row.parameter}
                   </td>
-                  <td className="py-[0.62vh] px-[0.7vw] text-xs md:text-sm font-semibold text-emerald-400 bg-emerald-500/[0.06] leading-snug">
+                  <td className="py-[1.15vh] px-[0.9vw] text-sm md:text-base font-semibold text-emerald-400 bg-emerald-500/[0.06] leading-snug">
                     {row.boe}
                   </td>
-                  <td className="py-[0.62vh] px-[0.7vw] text-xs md:text-sm text-neutral-400 leading-snug">
+                  <td className="py-[1.15vh] px-[0.9vw] text-sm md:text-base text-neutral-400 leading-snug">
                     {row.mutual}
                   </td>
-                  <td className="py-[0.62vh] px-[0.7vw] text-xs md:text-sm text-neutral-400 leading-snug">
+                  <td className="py-[1.15vh] px-[0.9vw] text-sm md:text-base text-neutral-400 leading-snug">
                     {row.traditional}
                   </td>
-                  <td className="py-[0.62vh] px-[0.7vw] text-xs md:text-sm text-neutral-400 leading-snug">
+                  <td className="py-[1.15vh] px-[0.9vw] text-sm md:text-base text-neutral-400 leading-snug">
                     {row.fd}
                   </td>
                 </motion.tr>
