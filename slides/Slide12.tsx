@@ -56,7 +56,7 @@ const tableData = [
     boe: "Flexible",
     mutual: "Limited by Scheme",
     traditional: "Product Dependent",
-    fd: "Single Asset",
+    fd: "Multiple Asset",
   },
   {
     parameter: "Transparency",
@@ -73,10 +73,10 @@ const tableData = [
     fd: "Fixed Terms",
   },
   {
-    parameter: "Return Potential",
-    boe: "Competitive Long-Term CAGR",
+    parameter: "Return Policy",
+    boe: "Consistent Long Term Returns",
     mutual: "Market Linked",
-    traditional: "Product Dependent",
+    traditional: "Long Term Lock In",
     fd: "Fixed Returns",
   },
   {
