@@ -23,11 +23,11 @@ export default function Home() {
       <Slide4 />
       <Slide5 />
       <Slide11 />
-      <Slide12 />
       <Slide13 />
-      <Slide6 />
-      <Slide7 />
       <Slide9 />
+      <Slide7 />
+      <Slide12 />
+      <Slide6 />
       <Slide8 />
     </SlideContainer>
   );

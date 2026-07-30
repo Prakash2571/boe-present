@@ -46,8 +46,8 @@ export default function Slide13() {
         variants={popupVars}
         className="text-3xl md:text-4xl font-bold text-white tracking-tight text-center mt-[0.5vh]"
       >
-        Our Assets Under{" "}
-        <span className="text-gradient-gold">Management</span>
+        Our AUM{" "}
+        <span className="text-gradient-gold">Journey</span>
       </motion.h1>
       <div className="h-[2px] w-16 bg-gradient-to-r from-emerald-500 to-blue-500 mt-2 mb-[0.8vh] mx-auto" />
 

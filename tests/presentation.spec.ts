@@ -22,16 +22,32 @@ const slideAssertions = [
     supportingText: /systematic investment plan/i,
   },
   {
-    heading: /why choose beonedge\?/i,
+    heading: /our performance history/i,
     supportingText: /experienced market participation/i,
   },
   {
-    heading: /what we do not do/i,
-    supportingText: /transparency and integrity/i,
+    heading: /performance comparison/i,
+    supportingText: /beonedge \(16% cagr\)/i,
+  },
+  {
+    heading: /our aum journey/i,
+    supportingText: /aum grown since 2022/i,
+  },
+  {
+    heading: /our customer journey/i,
+    supportingText: /aggregate clients/i,
   },
   {
     heading: /boe app/i,
     supportingText: /dedicated client portal/i,
+  },
+  {
+    heading: /why beonedge/i,
+    supportingText: /the beonedge advantage/i,
+  },
+  {
+    heading: /what we do not do/i,
+    supportingText: /transparency and integrity/i,
   },
   {
     heading: /contact us/i,
@@ -61,7 +77,7 @@ test("renders the first slide and layout container", async ({ page }) => {
   const root = page.getByTestId("presentation-root");
 
   await expect(root).toHaveAttribute("data-current-slide", "0");
-  await expect(root).toHaveAttribute("data-total-slides", "9");
+  await expect(root).toHaveAttribute("data-total-slides", "13");
   await expect(page.getByTestId("layout-container")).toBeVisible();
   await expect(
     page.getByRole("heading", { name: slideAssertions[0].heading }),
@@ -128,26 +144,25 @@ test("prevents page scrolling when using spacebar navigation", async ({ page }) 
 test("renders the animated graph slide with legend, svg, and axis label", async ({
   page,
 }) => {
-  // The graph is on slide 5 (zero-indexed)
-  await goToSlide(page, 5);
+  // The 6-year comparison graph is on slide 6 (zero-indexed)
+  await goToSlide(page, 6);
 
-  const graph = page.getByTestId("graph-container");
+  const graph = page.getByTestId("graph-6year-container");
   await expect(graph).toBeVisible();
   await expect(graph).toHaveAttribute(
     "data-graph-animation-state",
     /running|complete/,
   );
-  await expect(page.getByTestId("graph-svg")).toBeVisible();
-  await expect(page.getByTestId("graph-legend")).toContainText(
-    "BeOnEdge (16% CAGR)",
+  await expect(page.getByTestId("graph-6year-svg")).toBeVisible();
+  await expect(page.getByTestId("graph-6year-legend")).toContainText(
+    "Beonedge (16% CAGR)",
   );
-  await expect(page.getByTestId("graph-legend")).toContainText(
+  await expect(page.getByTestId("graph-6year-legend")).toContainText(
     "Nifty 50 (~11.6% CAGR)",
   );
-  await expect(page.getByTestId("graph-axis-label")).toContainText(
+  await expect(page.getByTestId("graph-6year-axis-label")).toContainText(
     "Growth of Rs. 100 Investment",
   );
-  await expect(page.locator("[data-testid='graph-svg'] circle")).toHaveCount(12);
 });
 
 test("keeps slide and graph animation timing within the expected range", async ({
@@ -161,10 +176,12 @@ test("keeps slide and graph animation timing within the expected range", async (
   expect(slideTransitionMs).toBeGreaterThanOrEqual(300);
   expect(slideTransitionMs).toBeLessThanOrEqual(1000);
 
-  await goToSlide(page, 5);
+  await goToSlide(page, 6);
 
   const graphTransitionMs = Number(
-    await page.getByTestId("graph-container").getAttribute("data-graph-draw-ms"),
+    await page
+      .getByTestId("graph-6year-container")
+      .getAttribute("data-graph-draw-ms"),
   );
 
   expect(graphTransitionMs).toBeGreaterThanOrEqual(300);

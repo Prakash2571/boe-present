@@ -2,7 +2,7 @@
 """
 Pure-stdlib generator that reproduces the BeOnEdge Next.js presentation deck as a
 multi-page landscape PDF. One page per slide, in the same order the app renders
-them (app/page.tsx): Slide0,1,2,3,4,5,11,12,13,6,7,9,8  (13 pages).
+them (app/page.tsx): Slide0,1,2,3,4,5,11,13,9,7,12,6,8  (13 pages).
 
 This is a faithful *content* reproduction of what the running app outputs
 (headings, copy, panels, and the two vector line charts with their real data).
@@ -588,7 +588,7 @@ def slide_aum(p):
     base(p, EMERALD)
     cx = PAGE_W/2
     _center_eyebrow(p, cx, 38, "PROVEN MOMENTUM", EMERALD)
-    title(p, cx, 66, [("Our Assets Under ", WHITE), ("Management", GOLD)], size=24, align='center')
+    title(p, cx, 66, [("Our AUM ", WHITE), ("Journey", GOLD)], size=24, align='center')
     divider(p, cx-32, 80, 64, EMERALD)
     p.wrap(cx, 100, "From a modest Rs.30,000 in 2022 to Rs.1.2 Crore today - the assets our clients "
            "trust us with have compounded steadily through disciplined, research-driven wealth "
@@ -753,20 +753,32 @@ def _center_eyebrow(p, cx, y, s, color):
     p.text(cx, y, s, 11, color, bold=True, align='center')
 
 
-def footer(p, n):
-    p.text(PAGE_W-30, PAGE_H-18, f"{n} / 13", 9, N500, align='right')
+_CUR_PAGE = [0]      # page number currently being rendered (set by build())
+_TOTAL_PAGES = [13]  # total deck length (set by build())
+
+
+def footer(p, n=None):
+    """Page footer. The page number is taken from the build() loop so that
+    reordering slides can never desync the printed numbering."""
+    num = _CUR_PAGE[0] or n
+    p.text(PAGE_W-30, PAGE_H-18, f"{num} / {_TOTAL_PAGES[0]}", 9, N500, align='right')
     p.text(30, PAGE_H-18, "BeOnEdge Wealth Management", 9, N500)
 
 
 # =====================================================================  PDF assembly
 def build():
     pages = []
-    for fn in [slide_title, slide_what, slide_philosophy, slide_services, slide_modes,
-               slide_performance, slide_compare6yr, slide_advantage, slide_aum,
-               slide_donot, slide_tracking, slide_journey, slide_contact]:
+    # Order must mirror app/page.tsx exactly.
+    deck = [slide_title, slide_what, slide_philosophy, slide_services, slide_modes,
+            slide_performance, slide_compare6yr, slide_aum, slide_journey,
+            slide_tracking, slide_advantage, slide_donot, slide_contact]
+    _TOTAL_PAGES[0] = len(deck)
+    for i, fn in enumerate(deck, 1):
+        _CUR_PAGE[0] = i
         pg = Page()
         fn(pg)
         pages.append(pg)
+    _CUR_PAGE[0] = 0
 
     objects = []
     def add(obj):
