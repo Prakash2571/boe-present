@@ -87,7 +87,7 @@ export default function Slide4() {
       content: (
         <>
           <div className="flex flex-wrap gap-2">
-            <span className="min-w-0 flex-1 rounded-full border border-emerald-500/25 bg-emerald-500/15 px-2.5 py-1 text-center text-xs font-semibold text-emerald-300">Minimum Capital: ₹5,00,000</span>
+            <span className="min-w-0 flex-1 rounded-full border border-emerald-500/25 bg-emerald-500/15 px-2.5 py-1 text-center text-xs font-semibold text-emerald-300">Minimum Capital: ₹10,00,000</span>
           </div>
           <p className="text-sm font-medium leading-relaxed text-white">Our PMS model is performance based.</p>
           <ul className="space-y-[0.5vh] text-sm text-neutral-300">

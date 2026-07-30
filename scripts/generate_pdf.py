@@ -346,7 +346,7 @@ def slide_modes(p):
             "Minimum: Rs.10,000     |     Holding Period: 12 months",
             "Suitable for investors who wish to deploy capital in a lump sum and participate in long-term market growth."]),
         ("3. PMS","(Portfolio Management Service)", EMERALD, [
-            "Minimum Capital: Rs.5,00,000   -   Our PMS model is performance based.",
+            "Minimum Capital: Rs.10,00,000   -   Our PMS model is performance based.",
             "Profit sharing applies only after outperforming benchmark returns.",
             "If benchmark returns are not beaten -> no commission. Complete alignment of investor & manager."]),
     ]
