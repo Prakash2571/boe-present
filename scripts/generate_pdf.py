@@ -292,14 +292,15 @@ def slide_philosophy(p):
                  "is equally important as generating returns.", 12, N300, colw-44, 18)
     panel(p, rx+22, ny2+8, colw-44, h-(ny2+8-top)-22, fill=PANEL2, border=BORDER)
     p.text(rx+34, ny2+30, "Our investment strategy focuses on:", 12, WHITE, bold=True)
-    for i, it in enumerate([
+    yy = ny2+50
+    for it in [
             "Managing downside risk",
             "Reducing volatility during market stress",
             "Protecting capital during extreme market conditions",
             "Disciplined portfolio diversification across asset classes",
-            "Strict downside risk controls with predefined stop-loss levels"]):
-        p.circle(rx+40, ny2+50+i*22-3, 2.5, fill=BLUE)
-        p.wrap(rx+50, ny2+50+i*22, it, 11.5, N300, colw-90, 15)
+            "Strict downside risk controls with predefined stop-loss levels"]:
+        p.circle(rx+40, yy-3, 2.5, fill=BLUE)
+        yy = p.wrap(rx+50, yy, it, 11.5, N300, colw-90, 15) + 6
     footer(p, 3)
 
 
@@ -455,7 +456,7 @@ def slide_why(p):
                series=[(bank, AMBER, 2.0),(nifty, PURPLE, 2.2),(beon, EMERALD, 2.8)],
                yticks=[80,100,120,140,160,180,200,220], ymin=80, ymax=220,
                xlabels=[(i/5, y) for i,y in enumerate(["2021","2022","2023","2024","2025","2026"])],
-               title_txt="BeOnEdge vs Nifty 50 vs Bank FD Performance Comparison (5 Years)",
+               title_txt="BeOnEdge vs Nifty 50 vs Bank FD (5-Year Growth)",
                legend=[("BeOnEdge (16% CAGR)",EMERALD),("Nifty 50 (~11.6% CAGR)",PURPLE),
                        ("Bank FD (8% CAGR)",AMBER)])
     footer(p, 6)
@@ -496,7 +497,7 @@ def slide_tracking(p):
     base(p, INDIGO)
     cx = PAGE_W/2
     _center_eyebrow(p, cx, 60, "TRANSPARENCY IN ACTION", INDIGO)
-    title(p, cx, 96, [("Client Investment ", WHITE), ("Tracking", GOLD)], size=28, align='center')
+    title(p, cx, 96, [("Boe ", WHITE), ("App", GOLD)], size=28, align='center')
     divider(p, cx-32, 112, 64, INDIGO)
     panel(p, 90, 138, PAGE_W-180, 330)
     ix = 118

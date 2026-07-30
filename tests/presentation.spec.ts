@@ -30,7 +30,7 @@ const slideAssertions = [
     supportingText: /transparency and integrity/i,
   },
   {
-    heading: /client investment tracking/i,
+    heading: /boe app/i,
     supportingText: /dedicated client portal/i,
   },
   {

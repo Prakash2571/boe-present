@@ -44,9 +44,9 @@ export default function Slide7() {
         variants={popupVars}
         className="text-3xl md:text-4xl font-bold text-white tracking-tight mt-[0.5vh]"
       >
-        Client Investment{" "}
+        Boe{" "}
         <span className="text-gradient-gold">
-          Tracking
+          App
         </span>
       </motion.h1>
       <div className="h-[2px] w-16 bg-gradient-to-r from-indigo-500 to-cyan-500 mt-2 mb-[1.5vh] mx-auto" />
