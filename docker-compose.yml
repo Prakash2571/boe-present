@@ -1,0 +1,49 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: boe-present:latest
+    container_name: boe-present
+
+    # --- automatic recovery -------------------------------------------------
+    # "unless-stopped" makes the Docker daemon restart this container whenever
+    # the process exits for any reason (crash, OOM, non-zero exit) and also
+    # bring it back up after a daemon restart or host reboot. The only case it
+    # stays down is an explicit `docker compose stop`/`docker stop`.
+    restart: unless-stopped
+
+    # Proper PID 1 that reaps zombies and forwards SIGTERM/SIGINT to the
+    # Next.js server so restarts and shutdowns are graceful.
+    init: true
+
+    ports:
+      - "${PORT:-3000}:3000"
+
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      NEXT_TELEMETRY_DISABLED: "1"
+
+    # Container-level liveness signal (also defined in the Dockerfile so plain
+    # `docker run` gets it too). Surfaces as "healthy"/"unhealthy" in
+    # `docker compose ps`.
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+    stop_grace_period: 15s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
