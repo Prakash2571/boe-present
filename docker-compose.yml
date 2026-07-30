@@ -17,12 +17,14 @@ services:
     # Next.js server so restarts and shutdowns are graceful.
     init: true
 
+    # HOST:CONTAINER — reachable on http://localhost:4040
+    # (port 3000 is deliberately avoided; override the host side with HOST_PORT)
     ports:
-      - "${PORT:-3000}:3000"
+      - "${HOST_PORT:-4040}:4041"
 
     environment:
       NODE_ENV: production
-      PORT: 3000
+      PORT: 4041
       HOSTNAME: 0.0.0.0
       NEXT_TELEMETRY_DISABLED: "1"
 
@@ -34,7 +36,7 @@ services:
         - CMD
         - node
         - -e
-        - "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+        - "fetch('http://127.0.0.1:4041/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
       interval: 30s
       timeout: 5s
       retries: 3

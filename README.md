@@ -42,11 +42,14 @@ docker compose restart web
 docker compose down
 ```
 
-The app is served at [http://localhost:3000](http://localhost:3000). To use a
-different host port:
+The app is served at [http://localhost:4040](http://localhost:4040) — host port
+`4040` is mapped to port `4041` inside the container, so the default Next.js port
+`3000` stays free on your machine.
+
+To publish it on a different host port:
 
 ```bash
-PORT=8080 docker compose up -d
+HOST_PORT=8080 docker compose up -d
 ```
 
 ### Plain Docker
@@ -55,7 +58,7 @@ PORT=8080 docker compose up -d
 docker build -t boe-present .
 
 docker run -d --name boe-present \
-  -p 3000:3000 \
+  -p 4040:4041 \
   --restart unless-stopped \
   --init \
   boe-present
