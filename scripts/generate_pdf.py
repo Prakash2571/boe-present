@@ -447,13 +447,14 @@ def draw_table(p, x, y, col_w, header, rows, highlight_col=None,
             lines.append(cur)
         return lines or ['']
 
-    # header row (fixed height, supports 2-line headers)
-    hh = 30
+    # header row (height auto-expands to fit the tallest wrapped header)
+    header_lines = [wrap_lines(htext, col_w[ci] - 16, hfs, bold=True)
+                    for ci, htext in enumerate(header)]
+    hh = max(30, max(len(hl) for hl in header_lines) * 11 + 10)
     p.rect(x, y, total_w, hh, fill=(0.09, 0.13, 0.20), stroke=BORDER)
     if highlight_col is not None:
         p.rect(col_x[highlight_col], y, col_w[highlight_col], hh, fill=(0.06, 0.20, 0.15))
-    for ci, htext in enumerate(header):
-        hlines = wrap_lines(htext, col_w[ci] - 16, hfs, bold=True)
+    for ci, hlines in enumerate(header_lines):
         col = highlight_color if ci == highlight_col else N400
         ty = y + (hh - (len(hlines) - 1) * 11) / 2 + hfs * 0.35
         for ln in hlines:
@@ -569,7 +570,7 @@ def slide_advantage(p):
                 "pursue sustainable, risk-conscious long-term wealth creation.",
                 10.5, N300, 780, 14, align='center')
     draw_table(p, 60, ny+6, [150, 190, 165, 180, 155],
-               ["Parameter", "BeOnEdge", "Mutual Funds", "Traditional Wealth Managers", "Bank FD"],
+               ["Parameter", "BeOnEdge", "Mutual Funds", "Traditional Wealth Management Firms", "Bank FD"],
                [["Investment Approach", "Driven by Research Analysis and Quant", "Fund Mandate Based", "Product Driven", "Fixed Interest"],
                 ["Portfolio Management", "Actively Managed", "Scheme Managed", "Advisor Dependent", "Not Applicable"],
                 ["Risk Management", "Dynamic & Active", "Fund-Level", "Varies", "Very Low Risk"],

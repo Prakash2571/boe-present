@@ -158,7 +158,7 @@ export default function Slide12() {
                   Mutual Funds
                 </th>
                 <th className="py-[1.3vh] px-[0.9vw] text-xs md:text-sm font-semibold uppercase tracking-wider text-neutral-400">
-                  Traditional Wealth Managers
+                  Traditional Wealth Management Firms
                 </th>
                 <th className="py-[1.3vh] px-[0.9vw] text-xs md:text-sm font-semibold uppercase tracking-wider text-neutral-400 rounded-r-lg">
                   Bank FD

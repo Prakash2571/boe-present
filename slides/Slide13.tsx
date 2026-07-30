@@ -49,21 +49,20 @@ export default function Slide13() {
         Our Assets Under{" "}
         <span className="text-gradient-gold">Management</span>
       </motion.h1>
-      <div className="h-[2px] w-16 bg-gradient-to-r from-emerald-500 to-blue-500 mt-2 mb-[1vh] mx-auto" />
+      <div className="h-[2px] w-16 bg-gradient-to-r from-emerald-500 to-blue-500 mt-2 mb-[0.8vh] mx-auto" />
 
       {/* Subheading */}
       <motion.p
         variants={popupVars}
-        className="text-xs md:text-sm text-neutral-300 text-center max-w-3xl mb-[1.5vh] leading-relaxed"
+        className="text-xs md:text-sm text-neutral-300 text-center max-w-3xl mb-[1vh] leading-relaxed"
       >
         From a modest <span className="text-white font-medium">₹30,000</span> in 2022 to{" "}
-        <span className="text-emerald-400 font-semibold">₹1.2 Crore</span> today — the assets our
-        clients trust us with have compounded steadily, a testament to disciplined, research-driven
-        wealth management.
+        <span className="text-emerald-400 font-semibold">₹1.2 Crore</span> today — compounded
+        steadily through disciplined, research-driven wealth management.
       </motion.p>
 
       {/* Stat cards */}
-      <div className="w-full grid grid-cols-3 gap-[1vw] mb-[1.2vh]">
+      <div className="w-full grid grid-cols-3 gap-[1vw] mb-[1vh]">
         {stats.map((stat) => (
           <ReactivePanel key={stat.label} className="glass flex flex-col items-center text-center p-[1.2vw]">
             <span className={`text-xl md:text-2xl font-bold ${stat.accent}`}>{stat.value}</span>
