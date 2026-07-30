@@ -25,12 +25,12 @@ export default function Slide11() {
       variants={containerVars}
       initial="hidden"
       animate="show"
-      className="w-full max-w-6xl mx-auto flex flex-col items-center justify-center h-full"
+      className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center h-full"
     >
       {/* Title */}
       <motion.h1
         variants={popupVars}
-        className="text-3xl md:text-4xl font-bold text-white tracking-tight text-center"
+        className="text-4xl md:text-5xl font-bold text-white tracking-tight text-center"
       >
         Performance{" "}
         <span className="text-gradient-gold">

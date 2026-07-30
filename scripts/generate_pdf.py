@@ -368,10 +368,13 @@ def slide_modes(p):
 
 
 def draw_chart(p, ox, oy, cw, ch, series, yticks, ymin, ymax, xlabels,
-               title_txt, legend, vlines=None, annotations=None, value_labels=None):
-    """Generic line chart. series: list of (points[(xf,val)], color, lw)."""
+               title_txt, legend, vlines=None, annotations=None, value_labels=None,
+               end_value_labels=None, pad_r=24):
+    """Generic line chart. series: list of (points[(xf,val)], color, lw).
+       end_value_labels: list of (value, text, colour) drawn just past the last
+       point, matching the on-screen charts."""
     panel(p, ox, oy, cw, ch, fill=(0.06,0.09,0.15), border=BORDER)
-    pad_l, pad_r, pad_t, pad_b = 62, 24, 44, 40
+    pad_l, pad_t, pad_b = 62, 44, 40
     gx, gy = ox+pad_l, oy+pad_t
     gw, gh = cw-pad_l-pad_r, ch-pad_t-pad_b
     # title
@@ -417,6 +420,10 @@ def draw_chart(p, ox, oy, cw, ch, series, yticks, ymin, ymax, xlabels,
     if value_labels:
         for f, v, txt, col in value_labels:
             p.text(X(f), Y(v)-8, txt, 10, col, bold=True, align='center')
+    # end-of-line value labels (just right of the final data point)
+    if end_value_labels:
+        for v, txt, col in end_value_labels:
+            p.text(X(1.0)+9, Y(v)+3.5, txt, 10.5, col, bold=True)
     # annotations
     if annotations:
         for f, lab, col, al in annotations:
@@ -543,19 +550,22 @@ def slide_performance(p):
 def slide_compare6yr(p):
     base(p, EMERALD)
     cx = PAGE_W/2
-    title(p, cx, 58, [("Performance ", WHITE), ("Comparison", GOLD), (" (6 Years)", WHITE)],
-          size=26, align='center')
-    divider(p, cx-32, 74, 64, EMERALD)
+    title(p, cx, 60, [("Performance ", WHITE), ("Comparison", GOLD), (" (6 Years)", WHITE)],
+          size=30, align='center')
+    divider(p, cx-32, 76, 64, EMERALD)
     beon = [(i/6, v) for i, v in enumerate([100, 116, 134.56, 156.09, 181.06, 210.03, 243.64])]
     nifty = [(i/6, v) for i, v in enumerate([100, 111.6, 124.54, 139.0, 155.12, 173.11, 193.19])]
     bank = [(i/6, v) for i, v in enumerate([100, 107, 114.49, 122.5, 131.08, 140.26, 150.07])]
-    draw_chart(p, 90, 96, PAGE_W-180, 382,
+    draw_chart(p, 60, 96, PAGE_W-120, 392,
                series=[(bank, AMBER, 2.0), (nifty, PURPLE, 2.2), (beon, EMERALD, 2.8)],
                yticks=[80, 100, 120, 140, 160, 180, 200, 220, 240, 260], ymin=80, ymax=260,
                xlabels=[(i/6, y) for i, y in enumerate(["2020", "2021", "2022", "2023", "2024", "2025", "2026"])],
                title_txt="BeOnEdge vs Nifty 50 vs Bank FD (6-Year Growth)",
                legend=[("BeOnEdge (16% CAGR)", EMERALD), ("Nifty 50 (~11.6% CAGR)", PURPLE),
-                       ("Bank FD (7% CAGR)", AMBER)])
+                       ("Bank FD (7% CAGR)", AMBER)],
+               end_value_labels=[(243.64, "Rs.244", EMERALDL), (193.19, "Rs.193", PURPLE),
+                                 (150.07, "Rs.150", AMBER)],
+               pad_r=62)
     footer(p, 7)
 
 
@@ -599,9 +609,9 @@ def slide_aum(p):
     cw = (PAGE_W-180-24)/3
     for i, (v, l, c) in enumerate(stats):
         bx = 90+i*(cw+12)
-        panel(p, bx, 132, cw, 52)
-        p.text(bx+cw/2, 158, v, 16, c, bold=True, align='center')
-        p.text(bx+cw/2, 176, l, 10.5, N400, align='center')
+        panel(p, bx, 130, cw, 62)
+        p.text(bx+cw/2, 158, v, 19, c, bold=True, align='center')
+        p.text(bx+cw/2, 180, l, 12, N400, align='center')
     TS, TE = 2022.0, 2026.4
 
     def fr(t):
@@ -661,27 +671,28 @@ def slide_tracking(p):
     base(p, INDIGO)
     cx = PAGE_W/2
     _center_eyebrow(p, cx, 60, "TRANSPARENCY IN ACTION", INDIGO)
-    title(p, cx, 96, [("Boe ", WHITE), ("App", GOLD)], size=28, align='center')
+    title(p, cx, 96, [("Beonedge ", WHITE), ("App", GOLD)], size=32, align='center')
     divider(p, cx-32, 112, 64, INDIGO)
-    panel(p, 90, 138, PAGE_W-180, 252)
-    ix = 118
-    p.wrap(ix, 172, "We believe investors should have complete transparency regarding their investments.",
-           12.5, N300, PAGE_W-2*ix, 18)
-    p.text(ix, 202, "BeOnEdge has developed a dedicated client portal where investors can:",
-           12.5, N300)
+    panel(p, 70, 138, PAGE_W-140, 330)
+    ix = 100
+    inner_w = PAGE_W-2*ix
+    p.wrap(ix, 178, "We believe investors should have complete transparency regarding their investments.",
+           15, N300, inner_w, 22)
+    p.text(ix, 214, "BeOnEdge has developed a dedicated client portal where investors can:",
+           15, N300)
     feats = ["Track their investments","Monitor portfolio performance",
              "View transaction history","Stay updated on portfolio allocation"]
-    cw = (PAGE_W-2*118-24)/2
+    cw = (inner_w-28)/2
     for i,f in enumerate(feats):
         col=i%2; row=i//2
-        bx = ix+col*(cw+24); by = 222+row*54
-        panel(p, bx, by, cw, 44, fill=PANEL2, border=BORDER)
-        p.circle(bx+26, by+22, 12, fill=(0.14,0.15,0.32))
-        p.text(bx+26, by+26, ">", 12, INDIGO, bold=True, align='center')
-        p.text(bx+48, by+27, f, 12, N300, bold=True)
-    panel(p, ix, 336, PAGE_W-2*118, 40, fill=(0.04,0.13,0.15), border=(0.13,0.35,0.4))
-    p.text(cx, 361, "This platform is currently available for clients and will soon be expanded "
-           "with a full public website and landing page.", 11, N400, align='center')
+        bx = ix+col*(cw+28); by = 240+row*70
+        panel(p, bx, by, cw, 58, fill=PANEL2, border=BORDER)
+        p.circle(bx+32, by+29, 15, fill=(0.14,0.15,0.32))
+        p.text(bx+32, by+34, ">", 15, INDIGO, bold=True, align='center')
+        p.text(bx+60, by+34, f, 14, N300, bold=True)
+    panel(p, ix, 390, inner_w, 52, fill=(0.04,0.13,0.15), border=(0.13,0.35,0.4))
+    p.wrap(cx, 414, "This platform is currently available for clients and will soon be expanded "
+           "with a full public website and landing page.", 13, N400, inner_w-40, 17, align='center')
     footer(p, 11)
 
 

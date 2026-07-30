@@ -15,12 +15,13 @@ const data = [
 ];
 
 const chart = {
-  width: 760,
-  height: 360,
-  paddingTop: 20,
-  paddingRight: 28,
-  paddingBottom: 40,
-  paddingLeft: 80,
+  width: 880,
+  height: 392,
+  paddingTop: 22,
+  // Extra right padding leaves room for the end-of-line value labels.
+  paddingRight: 74,
+  paddingBottom: 42,
+  paddingLeft: 82,
   minY: 80,
   maxY: 260,
 };
@@ -429,6 +430,37 @@ export default function GraphAnimation6Year() {
               }}
             />
           ))}
+
+          {/* End-of-line value labels (mirrors the AUM chart) */}
+          {(() => {
+            const last = computedPoints[computedPoints.length - 1];
+            const final = data[data.length - 1];
+            const endLabels = [
+              { y: last.beonedgeY, v: final["Beonedge (16% CAGR)"], color: "#6ee7b7" },
+              { y: last.niftyY, v: final["Nifty 50 (~11.6% CAGR)"], color: "#d8b4fe" },
+              { y: last.bankY, v: final["Bank FD (7% CAGR)"], color: "#fcd34d" },
+            ];
+            return endLabels.map((label, index) => (
+              <motion.text
+                key={`end-value-${index}`}
+                data-testid={`graph-6year-end-value-${index}`}
+                x={last.x + 11}
+                y={label.y + 4}
+                textAnchor="start"
+                fill={label.color}
+                fontSize="13"
+                fontWeight="700"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: shouldAnimate ? 1 : 0 }}
+                transition={{
+                  duration: 0.35,
+                  delay: prefersReducedMotion ? 0 : 0.78 + index * 0.07,
+                }}
+              >
+                {`₹${Math.round(label.v)}`}
+              </motion.text>
+            ));
+          })()}
 
           {/* Hover guide line + highlighted markers */}
           {hoverIndex !== null && (() => {

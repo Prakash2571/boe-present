@@ -31,58 +31,60 @@ export default function Slide7() {
       variants={containerVars}
       initial="hidden"
       animate="show"
-      className="w-full max-w-5xl mx-auto flex flex-col items-center justify-center text-center"
+      className="w-full max-w-6xl mx-auto flex flex-col items-center justify-center text-center"
     >
       <motion.p
         variants={popupVars}
-        className="text-indigo-400 font-medium tracking-widest uppercase text-xs"
+        className="text-indigo-400 font-medium tracking-widest uppercase text-sm"
       >
         Transparency in Action
       </motion.p>
 
       <motion.h1
         variants={popupVars}
-        className="text-3xl md:text-4xl font-bold text-white tracking-tight mt-[0.5vh]"
+        className="text-4xl md:text-5xl font-bold text-white tracking-tight mt-[0.6vh]"
       >
-        Boe{" "}
+        Beonedge{" "}
         <span className="text-gradient-gold">
           App
         </span>
       </motion.h1>
-      <div className="h-[2px] w-16 bg-gradient-to-r from-indigo-500 to-cyan-500 mt-2 mb-[1.5vh] mx-auto" />
+      <div className="h-[2px] w-20 bg-gradient-to-r from-indigo-500 to-cyan-500 mt-3 mb-[2vh] mx-auto" />
 
       <motion.div
         variants={popupVars}
-        className="glass-elevated rounded-xl p-[1.5vw] w-full text-left shadow-[0_0_40px_rgba(99,102,241,0.08)]"
+        className="glass-elevated rounded-2xl p-[2.2vw] w-full text-left shadow-[0_0_40px_rgba(99,102,241,0.08)]"
       >
-        <p className="text-neutral-300 text-sm mb-[0.8vh] leading-relaxed">
+        <p className="text-neutral-300 text-base md:text-lg mb-[1.2vh] leading-relaxed">
           We believe investors should have complete transparency regarding their investments.
         </p>
 
-        <p className="text-neutral-300 text-sm mb-[1vh]">
+        <p className="text-neutral-300 text-base md:text-lg mb-[1.8vh]">
           Beonedge has developed a dedicated client portal where investors can:
         </p>
 
-        <div className="grid grid-cols-2 gap-[1.2vw] mb-[1.2vh]">
+        <div className="grid grid-cols-2 gap-[1.5vw] mb-[2vh]">
           {features.map((item, index) => (
             <ReactivePanel
               key={index}
-              className="glass rounded-lg p-[1vw] h-full"
+              className="glass rounded-xl p-[1.4vw] h-full"
             >
-              <div className="flex items-center gap-[0.8vw] w-full">
-                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-indigo-500/15 flex items-center justify-center">
-                  <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center gap-[1vw] w-full">
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-indigo-500/15 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
                   </svg>
                 </div>
-                <span className="flex-1 text-neutral-300 text-sm font-medium">{item.title}</span>
+                <span className="flex-1 text-neutral-200 text-base md:text-lg font-medium leading-snug">
+                  {item.title}
+                </span>
               </div>
             </ReactivePanel>
           ))}
         </div>
 
-        <ReactivePanel className="glass rounded-lg p-[1vw] text-center border border-cyan-500/15 bg-cyan-500/[0.03]">
-          <p className="text-neutral-400 text-sm italic">
+        <ReactivePanel className="glass rounded-xl p-[1.4vw] text-center border border-cyan-500/15 bg-cyan-500/[0.03]">
+          <p className="text-neutral-400 text-base md:text-lg italic leading-relaxed">
             This platform is currently available for clients and will soon be expanded with a full public website and landing page.
           </p>
         </ReactivePanel>
