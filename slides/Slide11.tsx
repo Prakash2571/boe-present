@@ -40,8 +40,10 @@ export default function Slide11() {
       </motion.h1>
       <div className="h-[2px] w-16 bg-gradient-to-r from-emerald-500 to-blue-500 mt-2 mb-[1.5vh] mx-auto" />
 
-      {/* Graph — dominant full-width element */}
-      <ReactivePanel className="w-full flex-1 min-h-0">
+      {/* Graph — dominant full-width element.
+          No flex-1 here: letting the panel take its natural (aspect-ratio)
+          height is what allows justify-center to actually centre the stack. */}
+      <ReactivePanel className="w-full">
         <GraphAnimation6Year />
       </ReactivePanel>
     </motion.div>
