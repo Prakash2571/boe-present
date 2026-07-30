@@ -528,7 +528,7 @@ def slide_performance(p):
     # market cycles table
     ty = top + h + 12
     p.text(cx, ty, "Market Cycles Successfully Navigated", 12, WHITE, bold=True, align='center')
-    draw_table(p, 90, ty+10, [90, 370, 380],
+    draw_table(p, 90, ty+10, [90, 340, 350],
                ["Year", "Market Event", "Investment Outcome"],
                [["2020", "COVID-19 Market Crash", "Capital Preservation"],
                 ["2021", "Economic Recovery", "Captured Market Upside"],
@@ -663,10 +663,10 @@ def slide_tracking(p):
     _center_eyebrow(p, cx, 60, "TRANSPARENCY IN ACTION", INDIGO)
     title(p, cx, 96, [("Boe ", WHITE), ("App", GOLD)], size=28, align='center')
     divider(p, cx-32, 112, 64, INDIGO)
-    panel(p, 90, 138, PAGE_W-180, 330)
+    panel(p, 90, 138, PAGE_W-180, 252)
     ix = 118
     p.wrap(ix, 172, "We believe investors should have complete transparency regarding their investments.",
-           12.5, N300, PAGE_W-2*ix+56, 18)
+           12.5, N300, PAGE_W-2*ix, 18)
     p.text(ix, 202, "BeOnEdge has developed a dedicated client portal where investors can:",
            12.5, N300)
     feats = ["Track their investments","Monitor portfolio performance",
@@ -679,7 +679,7 @@ def slide_tracking(p):
         p.circle(bx+26, by+22, 12, fill=(0.14,0.15,0.32))
         p.text(bx+26, by+26, ">", 12, INDIGO, bold=True, align='center')
         p.text(bx+48, by+27, f, 12, N300, bold=True)
-    panel(p, ix, 336, PAGE_W-2*118+56, 40, fill=(0.04,0.13,0.15), border=(0.13,0.35,0.4))
+    panel(p, ix, 336, PAGE_W-2*118, 40, fill=(0.04,0.13,0.15), border=(0.13,0.35,0.4))
     p.text(cx, 361, "This platform is currently available for clients and will soon be expanded "
            "with a full public website and landing page.", 11, N400, align='center')
     footer(p, 11)
