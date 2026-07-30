@@ -23,7 +23,6 @@ export default function Slide9() {
   const stats = [
     { value: "0 → 120", label: "Aggregate clients", accent: "text-emerald-400" },
     { value: "May 2025", label: "Officially registered", accent: "text-amber-400" },
-    { value: "Coming soon", label: "App, website & more", accent: "text-blue-400" },
   ];
 
   return (
@@ -53,7 +52,7 @@ export default function Slide9() {
       <div className="h-[2px] w-16 bg-gradient-to-r from-emerald-500 to-blue-500 mt-2 mb-[1.5vh] mx-auto" />
 
       {/* Stat cards */}
-      <div className="w-full grid grid-cols-3 gap-[1vw] mb-[1.2vh]">
+      <div className="grid grid-cols-2 gap-[1vw] mb-[1.2vh] w-full max-w-2xl mx-auto">
         {stats.map((stat) => (
           <ReactivePanel key={stat.label} className="glass flex flex-col items-center text-center p-[1.2vw]">
             <span className={`text-xl md:text-2xl font-bold ${stat.accent}`}>{stat.value}</span>

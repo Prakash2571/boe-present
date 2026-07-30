@@ -507,7 +507,7 @@ def slide_performance(p):
     h = 126
     panel(p, lx, top, cw, h)
     p.rect(lx, top, 3, h, fill=BLUE)
-    p.text(lx+18, top+26, "Experienced Market Participation", 12.5, WHITE, bold=True)
+    p.text(lx+18, top+26, "Experienced Market Cycle", 12.5, WHITE, bold=True)
     p.wrap(lx+18, top+46, "Our team has actively participated in financial markets for over "
            "5 years, navigating multiple market cycles including:", 10.5, N300, cw-36, 14)
     for i, it in enumerate(["COVID-19 market crash", "Russia-Ukraine volatility",
@@ -692,11 +692,13 @@ def slide_journey(p):
     title(p, cx, 76, [("Our Customer ", WHITE), ("Journey", GOLD)], size=24, align='center')
     divider(p, cx-32, 88, 64, EMERALD)
     stats = [("0 -> 120","Aggregate clients", EMERALD),
-             ("May 2025","Officially registered", AMBER),
-             ("Coming soon","App, website & more", BLUE)]
+             ("May 2025","Officially registered", AMBER)]
     cw = (PAGE_W-180-24)/3
+    # centre the remaining cards as a group on the page
+    group_w = len(stats)*cw + (len(stats)-1)*12
+    gx0 = (PAGE_W - group_w)/2
     for i,(v,l,c) in enumerate(stats):
-        bx = 90+i*(cw+12)
+        bx = gx0+i*(cw+12)
         panel(p, bx, 100, cw, 56)
         p.text(bx+cw/2, 128, v, 18, c, bold=True, align='center')
         p.text(bx+cw/2, 148, l, 11, N400, align='center')

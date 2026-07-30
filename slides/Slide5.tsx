@@ -89,7 +89,7 @@ export default function Slide5() {
               </svg>
             </div>
             <h2 className="text-sm md:text-base font-bold text-white leading-tight">
-              Experienced Market Participation
+              Experienced Market Cycle
             </h2>
           </div>
           <p className="text-xs text-neutral-300 leading-relaxed mb-[0.8vh]">
