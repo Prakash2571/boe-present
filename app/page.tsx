@@ -7,6 +7,7 @@ import Slide4 from "@/slides/Slide4";
 import Slide5 from "@/slides/Slide5";
 import Slide11 from "@/slides/Slide11";
 import Slide12 from "@/slides/Slide12";
+import Slide13 from "@/slides/Slide13";
 import Slide6 from "@/slides/Slide6";
 import Slide7 from "@/slides/Slide7";
 import Slide9 from "@/slides/Slide9";
@@ -23,6 +24,7 @@ export default function Home() {
       <Slide5 />
       <Slide11 />
       <Slide12 />
+      <Slide13 />
       <Slide6 />
       <Slide7 />
       <Slide9 />
