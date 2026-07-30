@@ -37,12 +37,12 @@ const data: {
 ];
 
 const chart = {
-  width: 760,
-  height: 360,
-  paddingTop: 20,
-  paddingRight: 28,
-  paddingBottom: 40,
-  paddingLeft: 80,
+  width: 820,
+  height: 280,
+  paddingTop: 18,
+  paddingRight: 30,
+  paddingBottom: 38,
+  paddingLeft: 76,
   minY: 0,
   maxY: 120,
 };
@@ -167,7 +167,13 @@ export default function CustomerJourneyGraph() {
           delay: CONTENT_TRANSITION_MS / 1000 / 2,
         }}
         className="relative w-full px-[0.5vw] pb-[0.5vh]"
-        style={{ aspectRatio: `${chart.width} / ${chart.height}` }}
+        // The aspect ratio drives the height on tall viewports; maxHeight caps
+        // it on short ones so the slide always fits at 100% zoom. The SVG's
+        // preserveAspectRatio="xMidYMid meet" keeps it proportional + centred.
+        style={{
+          aspectRatio: `${chart.width} / ${chart.height}`,
+          maxHeight: "42vh",
+        }}
       >
         <svg
           data-testid="customer-journey-svg"
@@ -273,7 +279,7 @@ export default function CustomerJourneyGraph() {
             <motion.text
               key={tick.label}
               x={xForYear(tick.t)}
-              y={baselineY + 22}
+              y={baselineY + 20}
               textAnchor="middle"
               className="fill-white/60"
               fontSize="11"
@@ -394,7 +400,7 @@ export default function CustomerJourneyGraph() {
           <motion.text
             data-testid="milestone-start"
             x={points[0].x}
-            y={baselineY + 38}
+            y={baselineY + 33}
             textAnchor="start"
             fill="#94a3b8"
             fontSize="10"
@@ -408,7 +414,7 @@ export default function CustomerJourneyGraph() {
           <motion.text
             data-testid="milestone-end"
             x={points[points.length - 1].x}
-            y={baselineY + 38}
+            y={baselineY + 33}
             textAnchor="end"
             fill="#6ee7b7"
             fontSize="10"

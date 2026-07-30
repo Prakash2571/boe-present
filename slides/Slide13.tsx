@@ -67,12 +67,12 @@ export default function Slide13() {
           // NOTE: the flex layout must live *inside* ReactivePanel — it renders
           // children in its own wrapper div, so flex classes on the panel
           // itself would not reach these spans (they'd sit inline).
-          <ReactivePanel key={stat.label} className="glass rounded-xl p-[1.4vw]">
+          <ReactivePanel key={stat.label} className="glass rounded-xl px-[1.2vw] py-[0.8vh]">
             <div className="flex h-full flex-col items-center justify-center text-center">
-              <span className={`text-2xl md:text-3xl font-bold leading-tight ${stat.accent}`}>
+              <span className={`text-xl md:text-2xl font-bold leading-none ${stat.accent}`}>
                 {stat.value}
               </span>
-              <span className="mt-[0.5vh] text-sm md:text-base text-neutral-400 leading-snug">
+              <span className="mt-[0.35vh] text-xs md:text-sm text-neutral-400 leading-tight">
                 {stat.label}
               </span>
             </div>

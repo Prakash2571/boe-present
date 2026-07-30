@@ -609,9 +609,9 @@ def slide_aum(p):
     cw = (PAGE_W-180-24)/3
     for i, (v, l, c) in enumerate(stats):
         bx = 90+i*(cw+12)
-        panel(p, bx, 130, cw, 62)
-        p.text(bx+cw/2, 158, v, 19, c, bold=True, align='center')
-        p.text(bx+cw/2, 180, l, 12, N400, align='center')
+        panel(p, bx, 132, cw, 54)
+        p.text(bx+cw/2, 159, v, 18, c, bold=True, align='center')
+        p.text(bx+cw/2, 177, l, 11.5, N400, align='center')
     TS, TE = 2022.0, 2026.4
 
     def fr(t):
@@ -710,9 +710,9 @@ def slide_journey(p):
     gx0 = (PAGE_W - group_w)/2
     for i,(v,l,c) in enumerate(stats):
         bx = gx0+i*(cw+12)
-        panel(p, bx, 98, cw, 62)
-        p.text(bx+cw/2, 126, v, 19, c, bold=True, align='center')
-        p.text(bx+cw/2, 148, l, 12, N400, align='center')
+        panel(p, bx, 100, cw, 54)
+        p.text(bx+cw/2, 127, v, 18, c, bold=True, align='center')
+        p.text(bx+cw/2, 145, l, 11.5, N400, align='center')
     # timeline chart. map decimal year to fraction across 2023..2026.45
     TS, TE, REG = 2023.0, 2026.45, 2025.33
     def fr(t): return (t-TS)/(TE-TS)

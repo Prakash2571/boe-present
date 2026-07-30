@@ -177,7 +177,13 @@ export default function AumGrowthGraph() {
           delay: CONTENT_TRANSITION_MS / 1000 / 2,
         }}
         className="relative w-full px-[0.5vw] pb-[0.5vh]"
-        style={{ aspectRatio: `${chart.width} / ${chart.height}` }}
+        // The aspect ratio drives the height on tall viewports; maxHeight caps
+        // it on short ones so the slide always fits at 100% zoom. The SVG's
+        // preserveAspectRatio="xMidYMid meet" keeps it proportional + centred.
+        style={{
+          aspectRatio: `${chart.width} / ${chart.height}`,
+          maxHeight: "42vh",
+        }}
       >
         <svg
           data-testid="aum-growth-svg"

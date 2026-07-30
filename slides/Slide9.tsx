@@ -49,20 +49,20 @@ export default function Slide9() {
           Journey
         </span>
       </motion.h1>
-      <div className="h-[2px] w-16 bg-gradient-to-r from-emerald-500 to-blue-500 mt-2 mb-[1.5vh] mx-auto" />
+      <div className="h-[2px] w-16 bg-gradient-to-r from-emerald-500 to-blue-500 mt-2 mb-[1vh] mx-auto" />
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 gap-[1vw] mb-[1.2vh] w-full max-w-2xl mx-auto">
+      <div className="grid grid-cols-2 gap-[1vw] mb-[1vh] w-full max-w-2xl mx-auto">
         {stats.map((stat) => (
           // NOTE: the flex layout must live *inside* ReactivePanel — it renders
           // children in its own wrapper div, so flex classes on the panel
           // itself would not reach these spans (they'd sit inline).
-          <ReactivePanel key={stat.label} className="glass rounded-xl p-[1.4vw]">
+          <ReactivePanel key={stat.label} className="glass rounded-xl px-[1.2vw] py-[0.8vh]">
             <div className="flex h-full flex-col items-center justify-center text-center">
-              <span className={`text-2xl md:text-3xl font-bold leading-tight ${stat.accent}`}>
+              <span className={`text-xl md:text-2xl font-bold leading-none ${stat.accent}`}>
                 {stat.value}
               </span>
-              <span className="mt-[0.5vh] text-sm md:text-base text-neutral-400 leading-snug">
+              <span className="mt-[0.35vh] text-xs md:text-sm text-neutral-400 leading-tight">
                 {stat.label}
               </span>
             </div>
@@ -76,8 +76,8 @@ export default function Slide9() {
       </ReactivePanel>
 
       {/* Caption bar */}
-      <ReactivePanel className="glass mt-[0.5vh] w-full p-[0.8vw]">
-        <p className="text-sm text-neutral-300 text-center leading-relaxed">
+      <ReactivePanel className="glass mt-[0.5vh] w-full px-[0.9vw] py-[0.6vh]">
+        <p className="text-xs md:text-sm text-neutral-300 text-center leading-relaxed">
           What began in <span className="text-white font-medium">2023</span> as a student venture grew slowly at first.
           After being <span className="text-amber-400 font-semibold">officially registered in May 2025</span>, momentum
           took off — reaching <span className="text-emerald-400 font-semibold">120 aggregate clients</span> today from our
