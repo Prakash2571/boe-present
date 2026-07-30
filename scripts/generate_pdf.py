@@ -2,7 +2,7 @@
 """
 Pure-stdlib generator that reproduces the BeOnEdge Next.js presentation deck as a
 multi-page landscape PDF. One page per slide, in the same order the app renders
-them (app/page.tsx): Slide0,1,2,3,4,5,6,7,9,8.
+them (app/page.tsx): Slide0,1,2,3,4,5,11,12,13,6,7,9,8  (13 pages).
 
 This is a faithful *content* reproduction of what the running app outputs
 (headings, copy, panels, and the two vector line charts with their real data).
@@ -423,43 +423,206 @@ def draw_chart(p, ox, oy, cw, ch, series, yticks, ymin, ymax, xlabels,
             p.text(X(f), gy+gh+34, lab, 9, col, align=al)
 
 
-def slide_why(p):
+def draw_table(p, x, y, col_w, header, rows, highlight_col=None,
+               highlight_color=EMERALD, fs=10.5, hfs=9.5, line_h=13, pad=6):
+    """Render a wrapping, auto-height comparison table. Returns bottom y.
+       col_w: list of column widths. header/rows: list(s) of cell strings."""
+    total_w = sum(col_w)
+    col_x = []
+    acc = x
+    for w in col_w:
+        col_x.append(acc)
+        acc += w
+
+    def wrap_lines(s, w, size, bold=False):
+        lines, cur = [], ''
+        for wd in _san(s).split():
+            trial = (cur + ' ' + wd).strip()
+            if text_width(trial, size, bold) > w and cur:
+                lines.append(cur)
+                cur = wd
+            else:
+                cur = trial
+        if cur:
+            lines.append(cur)
+        return lines or ['']
+
+    # header row (fixed height, supports 2-line headers)
+    hh = 30
+    p.rect(x, y, total_w, hh, fill=(0.09, 0.13, 0.20), stroke=BORDER)
+    if highlight_col is not None:
+        p.rect(col_x[highlight_col], y, col_w[highlight_col], hh, fill=(0.06, 0.20, 0.15))
+    for ci, htext in enumerate(header):
+        hlines = wrap_lines(htext, col_w[ci] - 16, hfs, bold=True)
+        col = highlight_color if ci == highlight_col else N400
+        ty = y + (hh - (len(hlines) - 1) * 11) / 2 + hfs * 0.35
+        for ln in hlines:
+            p.text(col_x[ci] + 8, ty, ln, hfs, col, bold=True)
+            ty += 11
+
+    cy = y + hh
+    for ri, row in enumerate(rows):
+        cell_lines = [wrap_lines(row[ci], col_w[ci] - 16, fs,
+                                 bold=(ci == 0 or ci == highlight_col))
+                      for ci in range(len(row))]
+        nlines = max(len(cl) for cl in cell_lines)
+        rh = max(nlines * line_h + 2 * pad, 24)
+        if ri % 2 == 0:
+            p.rect(x, cy, total_w, rh, fill=(0.055, 0.08, 0.13))
+        if highlight_col is not None:
+            p.rect(col_x[highlight_col], cy, col_w[highlight_col], rh, fill=(0.05, 0.16, 0.12))
+        p.line(x, cy + rh, x + total_w, cy + rh, color=(0.15, 0.19, 0.28), lw=0.6)
+        for ci, lines in enumerate(cell_lines):
+            block_h = len(lines) * line_h
+            ty = cy + (rh - block_h) / 2 + fs * 0.82
+            if ci == highlight_col:
+                col, bold = highlight_color, True
+            elif ci == 0:
+                col, bold = WHITE, True
+            else:
+                col, bold = N400, False
+            for ln in lines:
+                p.text(col_x[ci] + 8, ty, ln, fs, col, bold=bold)
+                ty += line_h
+        cy += rh
+    p.rect(x, y, total_w, cy - y, stroke=BORDER)
+    return cy
+
+
+def slide_performance(p):
     base(p, EMERALD)
     cx = PAGE_W/2
-    title(p, cx, 46, [("Why Choose ", WHITE), ("BeOnEdge?", GOLD)], size=24, align='center')
-    divider(p, cx-32, 58, 64, EMERALD)
+    _center_eyebrow(p, cx, 38, "PROVEN TRACK RECORD", EMERALD)
+    title(p, cx, 66, [("Our ", WHITE), ("Performance History", GOLD)], size=25, align='center')
+    divider(p, cx-32, 80, 64, EMERALD)
+    ny = p.wrap(cx, 100, "Over the past six years, our research-driven investment process has "
+                "consistently delivered superior risk-adjusted returns across multiple market "
+                "environments through disciplined asset allocation and risk management.",
+                11, N300, 820, 15, align='center')
     # two info cards
     cw = (PAGE_W-180-24)/2
     lx, rx = 90, 90+cw+24
-    top = 74; h = 130
+    top = ny + 8
+    h = 126
     panel(p, lx, top, cw, h)
-    p.text(lx+18, top+26, "Experienced Market Participation", 13, WHITE, bold=True)
+    p.rect(lx, top, 3, h, fill=BLUE)
+    p.text(lx+18, top+26, "Experienced Market Participation", 12.5, WHITE, bold=True)
     p.wrap(lx+18, top+46, "Our team has actively participated in financial markets for over "
            "5 years, navigating multiple market cycles including:", 10.5, N300, cw-36, 14)
-    for i,it in enumerate(["COVID-19 market crash","Russia-Ukraine geopolitical volatility",
-                           "Bull market phases of 2023-2024","Current evolving market conditions"]):
-        col = i%2; row = i//2
-        bx = lx+18+col*(cw/2-4)
-        p.circle(bx+4, top+92+row*17-3, 2.3, fill=BLUE)
-        p.text(bx+12, top+92+row*17, it, 9.5, N400)
+    for i, it in enumerate(["COVID-19 market crash", "Russia-Ukraine volatility",
+                            "Bull markets of 2023-2024", "Current market conditions"]):
+        c = i % 2
+        r = i // 2
+        bx = lx+18+c*((cw-36)/2)
+        p.circle(bx+4, top+94+r*17-3, 2.3, fill=BLUE)
+        p.text(bx+12, top+94+r*17, it, 9.5, N400)
     panel(p, rx, top, cw, h)
-    p.text(rx+18, top+26, "Strong Performance Track Record", 13, WHITE, bold=True)
+    p.rect(rx, top, 3, h, fill=EMERALD)
+    p.text(rx+18, top+26, "Strong Performance Track Record", 12.5, WHITE, bold=True)
     p.wrap(rx+18, top+46, "We have maintained an average CAGR of approximately 16% over the "
            "last 5 years through disciplined investing.", 10.5, N300, cw-36, 14)
-    p.wrap(rx+18, top+82, "A Rs.100 investment growing at 16% CAGR reaches approximately Rs.210 "
-           "in 5 years, compared to around Rs.176 at 12% CAGR benchmark growth.", 9.5, N400, cw-36, 13)
-    # chart
-    beon = [(i/5, v) for i,v in enumerate([100,116,134.56,156.09,181.06,210])]
-    nifty= [(i/5, v) for i,v in enumerate([100,111.6,124.54,139.0,155.12,176])]
-    bank = [(i/5, v) for i,v in enumerate([100,108,116.64,125.97,136.05,146.93])]
-    draw_chart(p, 90, 214, PAGE_W-180, 250,
-               series=[(bank, AMBER, 2.0),(nifty, PURPLE, 2.2),(beon, EMERALD, 2.8)],
-               yticks=[80,100,120,140,160,180,200,220], ymin=80, ymax=220,
-               xlabels=[(i/5, y) for i,y in enumerate(["2021","2022","2023","2024","2025","2026"])],
-               title_txt="BeOnEdge vs Nifty 50 vs Bank FD (5-Year Growth)",
-               legend=[("BeOnEdge (16% CAGR)",EMERALD),("Nifty 50 (~11.6% CAGR)",PURPLE),
-                       ("Bank FD (8% CAGR)",AMBER)])
+    p.wrap(rx+18, top+80, "A Rs.100 investment at 16% CAGR reaches ~Rs.210 in 5 years, versus "
+           "~Rs.176 at a 12% CAGR benchmark.", 9.5, N400, cw-36, 13)
+    p.text(rx+18, top+116, "The power of consistent alpha generation over time.", 9.5, EMERALDL, bold=True)
+    # market cycles table
+    ty = top + h + 12
+    p.text(cx, ty, "Market Cycles Successfully Navigated", 12, WHITE, bold=True, align='center')
+    draw_table(p, 90, ty+10, [90, 370, 380],
+               ["Year", "Market Event", "Investment Outcome"],
+               [["2020", "COVID-19 Market Crash", "Capital Preservation"],
+                ["2021", "Economic Recovery", "Captured Market Upside"],
+                ["2022", "Russia-Ukraine Conflict", "Risk-Controlled Returns"],
+                ["2023", "Inflation & Rate Hikes", "Benchmark Outperformance"],
+                ["2024", "Elections & Oil Volatility", "Consistent Alpha Generation"],
+                ["2025-26", "Global Geopolitical Uncertainty", "Stable Long-Term Performance"]],
+               highlight_col=0, highlight_color=EMERALD)
     footer(p, 6)
+
+
+def slide_compare6yr(p):
+    base(p, EMERALD)
+    cx = PAGE_W/2
+    title(p, cx, 58, [("Performance ", WHITE), ("Comparison", GOLD), (" (6 Years)", WHITE)],
+          size=26, align='center')
+    divider(p, cx-32, 74, 64, EMERALD)
+    beon = [(i/6, v) for i, v in enumerate([100, 116, 134.56, 156.09, 181.06, 210.03, 243.64])]
+    nifty = [(i/6, v) for i, v in enumerate([100, 111.6, 124.54, 139.0, 155.12, 173.11, 193.19])]
+    bank = [(i/6, v) for i, v in enumerate([100, 107, 114.49, 122.5, 131.08, 140.26, 150.07])]
+    draw_chart(p, 90, 96, PAGE_W-180, 382,
+               series=[(bank, AMBER, 2.0), (nifty, PURPLE, 2.2), (beon, EMERALD, 2.8)],
+               yticks=[80, 100, 120, 140, 160, 180, 200, 220, 240, 260], ymin=80, ymax=260,
+               xlabels=[(i/6, y) for i, y in enumerate(["2020", "2021", "2022", "2023", "2024", "2025", "2026"])],
+               title_txt="BeOnEdge vs Nifty 50 vs Bank FD (6-Year Growth)",
+               legend=[("BeOnEdge (16% CAGR)", EMERALD), ("Nifty 50 (~11.6% CAGR)", PURPLE),
+                       ("Bank FD (7% CAGR)", AMBER)])
+    footer(p, 7)
+
+
+def slide_advantage(p):
+    base(p, EMERALD)
+    cx = PAGE_W/2
+    _center_eyebrow(p, cx, 36, "THE BEONEDGE ADVANTAGE", EMERALD)
+    title(p, cx, 64, [("Why ", WHITE), ("BeOnEdge", GOLD)], size=26, align='center')
+    divider(p, cx-32, 78, 64, EMERALD)
+    ny = p.wrap(cx, 98, "We combine the research discipline of institutional investing with the "
+                "personalized service of a boutique wealth management firm - helping clients "
+                "pursue sustainable, risk-conscious long-term wealth creation.",
+                10.5, N300, 780, 14, align='center')
+    draw_table(p, 60, ny+6, [150, 190, 165, 180, 155],
+               ["Parameter", "BeOnEdge", "Mutual Funds", "Traditional Wealth Managers", "Bank FD"],
+               [["Investment Approach", "Driven by Research Analysis and Quant", "Fund Mandate Based", "Product Driven", "Fixed Interest"],
+                ["Portfolio Management", "Actively Managed", "Scheme Managed", "Advisor Dependent", "Not Applicable"],
+                ["Risk Management", "Dynamic & Active", "Fund-Level", "Varies", "Very Low Risk"],
+                ["Asset Allocation", "Flexible", "Limited by Scheme", "Product Dependent", "Multiple Asset"],
+                ["Transparency", "Dedicated Client Dashboard", "Monthly Factsheets", "Periodic Reports", "Passbook/Statement"],
+                ["Return Policy", "Consistent Long Term Returns", "Market Linked", "Long Term Lock In", "Fixed Returns"],
+                ["Benchmark Focus", "Target to Outperform", "Benchmark Relative", "Varies", "No Benchmark"],
+                ["Client Alignment", "Long-Term Wealth Creation", "Fund Objective", "Product Distribution", "Capital Preservation"],
+                ["Investment Experience", "Personalized", "Standardized", "Semi-Personalized", "Standard Banking"]],
+               highlight_col=1, highlight_color=EMERALD, fs=10, line_h=12)
+    footer(p, 8)
+
+
+def slide_aum(p):
+    base(p, EMERALD)
+    cx = PAGE_W/2
+    _center_eyebrow(p, cx, 38, "PROVEN MOMENTUM", EMERALD)
+    title(p, cx, 66, [("Our Assets Under ", WHITE), ("Management", GOLD)], size=24, align='center')
+    divider(p, cx-32, 80, 64, EMERALD)
+    p.wrap(cx, 100, "From a modest Rs.30,000 in 2022 to Rs.1.2 Crore today - the assets our clients "
+           "trust us with have compounded steadily through disciplined, research-driven wealth "
+           "management.", 11, N300, 820, 15, align='center')
+    stats = [("Rs.30K -> Rs.1.2 Cr", "AUM grown since 2022", EMERALD),
+             ("400x", "Growth in assets managed", AMBER),
+             ("2022 - 2026", "In just four years", BLUE)]
+    cw = (PAGE_W-180-24)/3
+    for i, (v, l, c) in enumerate(stats):
+        bx = 90+i*(cw+12)
+        panel(p, bx, 132, cw, 52)
+        p.text(bx+cw/2, 158, v, 16, c, bold=True, align='center')
+        p.text(bx+cw/2, 176, l, 10.5, N400, align='center')
+    TS, TE = 2022.0, 2026.4
+
+    def fr(t):
+        return (t-TS)/(TE-TS)
+    data = [(2022.0, 0.3), (2022.5, 0.8), (2023.0, 2.5), (2023.5, 5), (2024.0, 12),
+            (2024.5, 22), (2025.0, 38), (2025.5, 62), (2026.0, 95), (TE, 120)]
+    pts = [(fr(t), v) for t, v in data]
+    draw_chart(p, 90, 194, PAGE_W-180, 246,
+               series=[(pts, EMERALD, 2.8)],
+               yticks=[0, 20, 40, 60, 80, 100, 120], ymin=0, ymax=120,
+               xlabels=[(fr(2022), "2022"), (fr(2023), "2023"), (fr(2024), "2024"),
+                        (fr(2025), "2025"), (fr(2026), "2026"), (fr(TE), "Now")],
+               title_txt="Assets Under Management Growth (2022 - Present)",
+               legend=[("Assets Under Management", EMERALD)],
+               value_labels=[(fr(2022.0), 0.3, "Rs.30K", EMERALDL), (fr(2024.0), 12, "Rs.12L", EMERALDL),
+                             (fr(TE), 120, "Rs.1.2Cr", EMERALDL)],
+               annotations=[(fr(2022.0), "Started with Rs.30,000", N400, 'left'),
+                            (fr(TE), "Rs.1.2 Crore under management", EMERALDL, 'right')])
+    panel(p, 90, 448, PAGE_W-180, 46, fill=PANEL, border=BORDER)
+    p.wrap(112, 470, "What began at Rs.30,000 in 2022 has scaled to Rs.1.2 Crore in 2026 - and with "
+           "our expanding client base, we are just getting started.", 11, N300, PAGE_W-224, 15)
+    footer(p, 9)
 
 
 def slide_donot(p):
@@ -490,7 +653,7 @@ def slide_donot(p):
     p.rect(90, by2, 4, 40, fill=BLUE)
     p.text(cx, by2+25, "Our focus remains strictly on long-term disciplined wealth creation.",
            12.5, WHITE, bold=True, align='center')
-    footer(p, 7)
+    footer(p, 10)
 
 
 def slide_tracking(p):
@@ -518,7 +681,7 @@ def slide_tracking(p):
     panel(p, ix, 336, PAGE_W-2*118+56, 40, fill=(0.04,0.13,0.15), border=(0.13,0.35,0.4))
     p.text(cx, 361, "This platform is currently available for clients and will soon be expanded "
            "with a full public website and landing page.", 11, N400, align='center')
-    footer(p, 8)
+    footer(p, 11)
 
 
 def slide_journey(p):
@@ -559,7 +722,7 @@ def slide_journey(p):
            "officially registered in May 2025, momentum took off - reaching 120 aggregate clients "
            "today from our own office. App & website launching soon, with much more on the way.",
            11, N300, PAGE_W-224, 15)
-    footer(p, 9)
+    footer(p, 12)
 
 
 def slide_contact(p):
@@ -582,7 +745,7 @@ def slide_contact(p):
         col = CYAN if h=="Website" else N300
         for j,ln in enumerate(lines):
             p.text(bx+cw/2, 326+j*18, ln, 12, col, align='center')
-    footer(p, 10)
+    footer(p, 13)
 
 
 def _center_eyebrow(p, cx, y, s, color):
@@ -590,7 +753,7 @@ def _center_eyebrow(p, cx, y, s, color):
 
 
 def footer(p, n):
-    p.text(PAGE_W-30, PAGE_H-18, f"{n} / 10", 9, N500, align='right')
+    p.text(PAGE_W-30, PAGE_H-18, f"{n} / 13", 9, N500, align='right')
     p.text(30, PAGE_H-18, "BeOnEdge Wealth Management", 9, N500)
 
 
@@ -598,7 +761,8 @@ def footer(p, n):
 def build():
     pages = []
     for fn in [slide_title, slide_what, slide_philosophy, slide_services, slide_modes,
-               slide_why, slide_donot, slide_tracking, slide_journey, slide_contact]:
+               slide_performance, slide_compare6yr, slide_advantage, slide_aum,
+               slide_donot, slide_tracking, slide_journey, slide_contact]:
         pg = Page()
         fn(pg)
         pages.append(pg)

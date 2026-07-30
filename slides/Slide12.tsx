@@ -32,7 +32,7 @@ const containerVars = {
 const tableData = [
   {
     parameter: "Investment Approach",
-    boe: "Research-Driven",
+    boe: "Driven by Research Analysis and Quant",
     mutual: "Fund Mandate Based",
     traditional: "Product Driven",
     fd: "Fixed Interest",
@@ -64,13 +64,6 @@ const tableData = [
     mutual: "Monthly Factsheets",
     traditional: "Periodic Reports",
     fd: "Passbook/Statement",
-  },
-  {
-    parameter: "Decision Making",
-    boe: "Fundamental Research",
-    mutual: "Fund Manager",
-    traditional: "Relationship Manager",
-    fd: "Fixed Terms",
   },
   {
     parameter: "Return Policy",
