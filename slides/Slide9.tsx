@@ -54,9 +54,18 @@ export default function Slide9() {
       {/* Stat cards */}
       <div className="grid grid-cols-2 gap-[1vw] mb-[1.2vh] w-full max-w-2xl mx-auto">
         {stats.map((stat) => (
-          <ReactivePanel key={stat.label} className="glass flex flex-col items-center text-center p-[1.2vw]">
-            <span className={`text-xl md:text-2xl font-bold ${stat.accent}`}>{stat.value}</span>
-            <span className="text-sm text-neutral-400 mt-[0.3vh]">{stat.label}</span>
+          // NOTE: the flex layout must live *inside* ReactivePanel — it renders
+          // children in its own wrapper div, so flex classes on the panel
+          // itself would not reach these spans (they'd sit inline).
+          <ReactivePanel key={stat.label} className="glass rounded-xl p-[1.4vw]">
+            <div className="flex h-full flex-col items-center justify-center text-center">
+              <span className={`text-2xl md:text-3xl font-bold leading-tight ${stat.accent}`}>
+                {stat.value}
+              </span>
+              <span className="mt-[0.5vh] text-sm md:text-base text-neutral-400 leading-snug">
+                {stat.label}
+              </span>
+            </div>
           </ReactivePanel>
         ))}
       </div>

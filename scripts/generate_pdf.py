@@ -710,9 +710,9 @@ def slide_journey(p):
     gx0 = (PAGE_W - group_w)/2
     for i,(v,l,c) in enumerate(stats):
         bx = gx0+i*(cw+12)
-        panel(p, bx, 100, cw, 56)
-        p.text(bx+cw/2, 128, v, 18, c, bold=True, align='center')
-        p.text(bx+cw/2, 148, l, 11, N400, align='center')
+        panel(p, bx, 98, cw, 62)
+        p.text(bx+cw/2, 126, v, 19, c, bold=True, align='center')
+        p.text(bx+cw/2, 148, l, 12, N400, align='center')
     # timeline chart. map decimal year to fraction across 2023..2026.45
     TS, TE, REG = 2023.0, 2026.45, 2025.33
     def fr(t): return (t-TS)/(TE-TS)
